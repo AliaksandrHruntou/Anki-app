@@ -1,4 +1,4 @@
-import React from 'react';
+import { Link } from "react-router-dom";
 
 const DeckListItem = (props) => {
 
@@ -6,7 +6,9 @@ const DeckListItem = (props) => {
 
     return (
         <li className="list-group-item d-flex justify-content-between">
-            <span className="list-group-item-label">{title}</span>
+            <Link to="/main-table" onClick={(e) => props.onSelectDeck(e.target.getAttribute('data-deck'))}>
+                <span className="list-group-item-label" data-deck={title}>{title}</span>
+            </Link>
         </li>
     );
 };

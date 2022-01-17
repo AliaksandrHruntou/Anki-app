@@ -1,4 +1,3 @@
-import EditPanel from '../edit-panel/edit-panel';
 import { Component } from 'react';
 
 import './create-deck.css';

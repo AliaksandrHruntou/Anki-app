@@ -1,16 +1,17 @@
 import DeckListItem from '../deck-list-item/deck-list-item';
+import { Link } from 'react-router-dom';
 
 import './select-deck';
 
 const store = require('store');
 
-const SelectDeck = () => {
+const SelectDeck = (props) => {
 
     let deckTitles = store.get('titles');
 
     const elements = deckTitles.map(item => {
         return (
-            <DeckListItem title={item} />
+            <DeckListItem title={item} key={item} onSelectDeck={props.onSelectDeck} />
         );
     });
 

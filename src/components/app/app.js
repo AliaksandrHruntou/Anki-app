@@ -1,5 +1,4 @@
 import MainTable from '../main-table/main-table';
-import EditPanel from '../edit-panel/edit-panel';
 import Header from '../header/header';
 import SelectDeck from '../select-deck/select-deck';
 import CreateDeck from '../create-deck/create-deck';
@@ -25,12 +24,11 @@ class App extends Component {
     }
   }
 
-  setItemsToLocalStorage = () => {
-    store.set('first deck', this.state.deck);
-  }
-
-  getItemsToLocalStorage = () => {
-    console.log(store.get('first deck'));
+  onSelectDeck = (prop) => {
+    let selectedDeck = store.get(prop);
+    this.setState({
+      deck: selectedDeck
+    });
   }
 
   render() {
@@ -40,16 +38,16 @@ class App extends Component {
           <Header/>
           <Switch>
             <Route exact path="/">
-              {/* <MainTable deck={this.state.deck}/>
-              <EditPanel onGetStorage={this.getItemsToLocalStorage}
-                        onSetToStorage={this.setItemsToLocalStorage} /> */}
               <WelcomePage/>
             </Route>
             <Route exact path="/select-deck">
-              <SelectDeck/>
+              <SelectDeck onSelectDeck={this.onSelectDeck} />
             </Route>
             <Route exact path="/create-deck">
               <CreateDeck/>
+            </Route>
+            <Route exact path="/main-table">
+              <MainTable deck={this.state.deck} />
             </Route>
           </Switch>
         </div>
