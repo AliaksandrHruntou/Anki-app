@@ -3,6 +3,9 @@ import { Component } from "react";
 import './current-card.css';
 
 class CurrentCard extends Component {
+
+    
+
     render() {
         let {eng, rus} = this.props;
         return (

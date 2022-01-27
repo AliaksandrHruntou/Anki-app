@@ -26,6 +26,7 @@ class CreateDeck extends Component {
         const newCard = {
             eng,
             rus,
+            rating: 1,
             id: this.maxId++
         };
         this.setState(({deck}) => {

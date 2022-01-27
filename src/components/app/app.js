@@ -15,11 +15,11 @@ class App extends Component {
     super(props);
     this.state = {
       deck: [
-        {eng: "Money", rus: "Деньги"},
-        {eng: "Tiger", rus: "Тигр"},
-        {eng: "Pen", rus: "Ручка"},
-        {eng: "Bottle", rus: "Бутылка"},
-        {eng: "Tree", rus: "Дерево"},
+        {eng: "Money", rus: "Деньги", rating: 1},
+        {eng: "Tiger", rus: "Тигр", rating: 1},
+        {eng: "Pen", rus: "Ручка", rating: 1},
+        {eng: "Bottle", rus: "Бутылка", rating: 1},
+        {eng: "Tree", rus: "Дерево", rating: 1},
       ]
     }
   }
