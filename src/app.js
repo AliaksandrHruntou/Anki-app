@@ -1,12 +1,12 @@
-import MainTable from '../main-table/main-table';
-import Header from '../header/header';
-import SelectDeck from '../select-deck/select-deck';
-import CreateDeck from '../create-deck/create-deck';
+import MainTable from './components/main-table/main-table'
+import Header from './components/header/header';
+import SelectDeck from './components/select-deck/select-deck';
+import CreateDeck from './components/create-deck/create-deck';
 import { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'; 
 
 import './app.css';
-import WelcomePage from '../welcome-page/welcome-page';
+import WelcomePage from './components/welcome-page/welcome-page';
 
 const store = require('store');
 

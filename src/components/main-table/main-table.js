@@ -9,7 +9,7 @@ class MainTable extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentCard: this.props.deck.length - 1,
+            currentCard: 0,
             cards: this.props.deck,
             cardsLength: this.props.deck.length
         }
@@ -17,61 +17,49 @@ class MainTable extends Component {
 
     ScheduleAlgorithm = new ScheduleAlgorithm();
 
-    // onSaveLearnedCards = () => {
-    //     debugger
-    //     let {cards, currentCard} = this.state;
-    //     console.log(cards[currentCard]);
-    //     this.setState({
-    //         currentCard: currentCard - 1
-    //     });
-    // }
-
-    componentDidUpdate(prevProps, prevState) {
-        console.log(prevState);
-    }
+    
 
     onChangeRating = (prop) => {
-        debugger
-        const {cards, currentCard} = this.state;
-        debugger
-        const card = cards[currentCard];
-        let newCards = cards;
-        newCards = newCards.forEach(item => { 
-            debugger
-            if (item.id === card.id) {
-                item.rating = 2;
-            }
-        });
-        console.log(newCards);
+        const {currentCard, cardsLength} = this.state;
+        let deck = [...this.state.cards];
+        const card = deck[currentCard];
 
-        if (this.state.currentCard !== -1) {
+        if (currentCard < cardsLength) {
             switch (prop) {
                 case 'bad':
+                    deck.forEach(item => {
+                        if (item.id === card.id) {
+                            item.rating = 2;
+                            item.date = new Date();
+                        }
+                    });
                     this.setState({
-                        cards: newCards,
-                        currentCard: currentCard - 1
+                        cards: deck,
+                        currentCard: currentCard + 1
                     });
                     break;
                 case 'mid':
+                    deck.forEach(item => {
+                        if (item.id === card.id) {
+                            item.rating = 3;
+                            item.date = new Date();
+                        }
+                    });
                     this.setState({
-                        cards: newCards.forEach(item => {
-                            debugger
-                            if (item.id === card.id) {
-                                item.rating = 3;
-                            }
-                        }),
-                        currentCard: currentCard - 1
+                        cards: deck,
+                        currentCard: currentCard + 1
                     });
                     break;
                 case 'good':
+                    deck.forEach(item => {
+                        if (item.id === card.id) {
+                            item.rating = 4;
+                            item.date = new Date();
+                        }
+                    });
                     this.setState({
-                        cards: newCards.forEach(item => {
-                            debugger
-                            if (item.id === card.id) {
-                                item.rating = 4;
-                            }
-                        }),
-                        currentCard: currentCard - 1
+                        cards: deck,
+                        currentCard: currentCard + 1
                     });
                     break;
             }
@@ -81,12 +69,12 @@ class MainTable extends Component {
 
     render() {
 
-        const {currentCard} = this.state;
+        const {currentCard, cardsLength} = this.state;
         const {deck} = this.props;
         const endMessage = <div>
                                 <p>Learning Completed!</p>
                            </div>;
-        const isLearning = currentCard ? <CurrentCard eng={deck[currentCard].eng} rus={deck[currentCard].rus}/> : endMessage;
+        const isLearning = currentCard < cardsLength ? <CurrentCard eng={deck[currentCard].eng} rus={deck[currentCard].rus}/> : endMessage;
 
         return (
             <>
@@ -97,17 +85,17 @@ class MainTable extends Component {
                     <div className="buttons">
                         <Button onClick={(e) => this.onChangeRating(e.target.getAttribute('data-type'))}
                                 variant="danger"
-                                data-type="bad">Плохо</Button>
+                                data-type="bad">Again</Button>
                         <Button onClick={(e) => this.onChangeRating(e.target.getAttribute('data-type'))}
                                 className="medium"
                                 variant="warning"
-                                data-type="mid">Средне</Button>
+                                data-type="mid">Good</Button>
                         <Button onClick={(e) => this.onChangeRating(e.target.getAttribute('data-type'))}
                                 variant="success"
-                                data-type="good">Хорошо</Button>
+                                data-type="good">Easy</Button>
                     </div>
                     <div className="all-in-one-page">
-                        <Button variant="secondary">Показать все</Button>
+                        <Button variant="secondary">Show all</Button>
                     </div>
                 </div>
             </>

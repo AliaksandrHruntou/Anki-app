@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 import './create-deck.css';
 
@@ -13,7 +14,6 @@ class CreateDeck extends Component {
             deck: [],
             deckTitle: ''
         };
-        this.maxId = 1;
     }
 
     onValueChange = (e) => {
@@ -27,7 +27,8 @@ class CreateDeck extends Component {
             eng,
             rus,
             rating: 1,
-            id: this.maxId++
+            date: null,
+            id: uuidv4()
         };
         this.setState(({deck}) => {
             const newDeck = [...deck, newCard];
