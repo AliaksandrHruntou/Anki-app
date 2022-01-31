@@ -77,7 +77,7 @@ class MainTable extends Component {
 
         const {currentCard, cardsLength} = this.state;
         const {items} = this.props.deck;
-        const endMessage = <div>
+        const endMessage = <div className="card-container">
                                 <p>Learning Completed!</p>
                            </div>;
         const isLearning = currentCard < cardsLength ? <CurrentCard front={items[currentCard].front} back={items[currentCard].back}/> : endMessage;
@@ -106,7 +106,6 @@ class MainTable extends Component {
                 </div>
             </>
         );
-
     }
 }
 

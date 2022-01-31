@@ -47,3 +47,13 @@
 .medium {
     color: #fff;
 }
+
+.card-container {
+    cursor: pointer;
+    height: 150px;
+    width: 150px;
+    perspective: 800px;
+    position: relative;
+    margin: auto;
+    transition: ease-in;
+}

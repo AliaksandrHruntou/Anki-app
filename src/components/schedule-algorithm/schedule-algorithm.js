@@ -34,7 +34,7 @@ class ScheduleAlgorithm {
           }
           break;
         default:
-          return;
+          sortedDeck = [...deckItems];
       }
     });
 

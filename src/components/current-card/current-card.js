@@ -4,8 +4,6 @@ import './current-card.css';
 
 class CurrentCard extends Component {
 
-    
-
     render() {
         let {front, back} = this.props;
         return (
