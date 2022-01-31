@@ -10,15 +10,19 @@ class MainTable extends Component {
         super(props);
         this.state = {
             currentCard: 0,
-            cards: this.props.deck,
-            cardsLength: this.props.deck.length
+            cards: [...this.props.deck.items],
+            cardsLength: this.props.deck.items.length
         }
     }
 
-    ScheduleAlgorithm = new ScheduleAlgorithm();
+    scheduleAlgorithm = new ScheduleAlgorithm();    
 
+    componentWillUnmount() {
+        if (this.state.cards) {
+            this.scheduleAlgorithm.updateRepetitionInStorage(this.state.cards, this.props.deck.deckTitle);
+        }
+    }
     
-
     onChangeRating = (prop) => {
         const {currentCard, cardsLength} = this.state;
         let deck = [...this.state.cards];
@@ -62,6 +66,8 @@ class MainTable extends Component {
                         currentCard: currentCard + 1
                     });
                     break;
+                default:
+                    return;
             }
         }
 
@@ -70,11 +76,11 @@ class MainTable extends Component {
     render() {
 
         const {currentCard, cardsLength} = this.state;
-        const {deck} = this.props;
+        const {items} = this.props.deck;
         const endMessage = <div>
                                 <p>Learning Completed!</p>
                            </div>;
-        const isLearning = currentCard < cardsLength ? <CurrentCard eng={deck[currentCard].eng} rus={deck[currentCard].rus}/> : endMessage;
+        const isLearning = currentCard < cardsLength ? <CurrentCard front={items[currentCard].front} back={items[currentCard].back}/> : endMessage;
 
         return (
             <>

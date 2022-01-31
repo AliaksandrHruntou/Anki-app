@@ -1,5 +1,4 @@
 import DeckListItem from '../deck-list-item/deck-list-item';
-import { Link } from 'react-router-dom';
 
 import './select-deck';
 

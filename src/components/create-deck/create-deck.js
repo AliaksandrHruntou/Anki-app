@@ -9,9 +9,9 @@ class CreateDeck extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            eng: '',
-            rus: '',
-            deck: [],
+            front: '',
+            back: '',
+            items: [],
             deckTitle: ''
         };
     }
@@ -22,36 +22,42 @@ class CreateDeck extends Component {
         });
     }
 
-    onAddToDeck = (eng, rus) => {
+    onAddToDeck = (front, back) => {
         const newCard = {
-            eng,
-            rus,
+            front,
+            back,
             rating: 1,
-            date: null,
+            date: new Date(),
             id: uuidv4()
         };
-        this.setState(({deck}) => {
-            const newDeck = [...deck, newCard];
+        this.setState(({items}) => {
+            const newItems = [...items, newCard];
             return {
-                deck: newDeck
+                items: newItems
             }
         });
     }
 
     onAddDeckToLocalStorage = (key, values) => {
-        store.set(key, values);
+        const deck = {
+            deckTitle: key,
+            items: [...values]
+        }
+
+        store.set(key, deck);
+        
         this.setState({
-            deck: []
+            items: []
         });
     }
 
     onSubmitNewCard = (e) => {
         e.preventDefault();
-        if (this.state.eng.length < 1 || this.state.rus.length < 1) return;
-        this.onAddToDeck(this.state.eng, this.state.rus);
+        if (this.state.front.length < 1 || this.state.back.length < 1) return;
+        this.onAddToDeck(this.state.front, this.state.back);
         this.setState({
-            eng: '',
-            rus: ''
+            front: '',
+            back: ''
         });
     }
 
@@ -68,17 +74,17 @@ class CreateDeck extends Component {
     onSubmitNewDeck = (e) => {
         e.preventDefault();
         if (this.state.deckTitle.length < 1) return;
-        this.onAddDeckToLocalStorage(this.state.deckTitle, this.state.deck);
+        this.onAddDeckToLocalStorage(this.state.deckTitle, this.state.items);
         this.onAddTitleToLocalStorage(this.state.deckTitle);
         this.setState({
-            eng: '',
-            rus: '',
+            front: '',
+            back: '',
             deckTitle: ''
         });
     }
 
     render() {
-        const {eng, rus, deckTitle} = this.state;
+        const {front, back, deckTitle} = this.state;
 
         return (
             <div className="app-add-form">
@@ -89,14 +95,14 @@ class CreateDeck extends Component {
                     <input type="text"
                         className="form-control new-post-label"
                         placeholder="Введите слово на английском"
-                        name="eng"
-                        value={eng}
+                        name="front"
+                        value={front}
                         onChange={this.onValueChange} />
                     <input type="text"
                         className="form-control new-post-label"
                         placeholder="Введите слово на русском"
-                        name="rus"
-                        value={rus}
+                        name="back"
+                        value={back}
                         onChange={this.onValueChange} />
     
                     <button type="submit"

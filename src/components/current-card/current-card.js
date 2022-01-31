@@ -7,15 +7,15 @@ class CurrentCard extends Component {
     
 
     render() {
-        let {eng, rus} = this.props;
+        let {front, back} = this.props;
         return (
             <div className="card-container">
                 <div className="card">
                     <div className="front">
-                        <div className="eng">{eng}</div>
+                        <div className="eng">{front}</div>
                     </div>
                     <div className="front back">
-                        <div className="rus">{rus}</div>
+                        <div className="rus">{back}</div>
                     </div>
                 </div>
             </div>

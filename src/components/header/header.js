@@ -5,10 +5,10 @@ import './header.css';
 
 const Header = () => {
     return (
-        <Navbar className='header' variant="light" bg="primary" expand="lg">
+      <Navbar className='header' variant="light" bg="#fcfcfc" expand="lg">
         <Container fluid>
           <LinkContainer to="/">
-            <Navbar.Brand>Memory Cards</Navbar.Brand>
+            <Navbar.Brand>Memory Cardz</Navbar.Brand>
           </LinkContainer>
           <Navbar.Toggle aria-controls="navbar-dark-example" />
           <Navbar.Collapse id="navbar-dark-example">
