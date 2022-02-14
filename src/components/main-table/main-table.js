@@ -1,112 +1,110 @@
-import { Component } from "react";
+import { useState, useEffect} from "react";
 import { Button } from "react-bootstrap";
 import CurrentCard from "../current-card/current-card";
 import ScheduleAlgorithm from "../schedule-algorithm/schedule-algorithm";
+import DeckInfo from "../deck-info/deck-info";
 
 import './main-table.css';
 
-class MainTable extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            currentCard: 0,
-            cards: [...this.props.deck.items],
-            cardsLength: this.props.deck.items.length
-        }
-    }
+const MainTable = ({deck, mode}) => {
 
-    scheduleAlgorithm = new ScheduleAlgorithm();    
+  const {items, deckTitle} = deck;
 
-    componentWillUnmount() {
-        if (this.state.cards) {
-            this.scheduleAlgorithm.updateRepetitionInStorage(this.state.cards, this.props.deck.deckTitle);
-        }
-    }
-    
-    onChangeRating = (prop) => {
-        const {currentCard, cardsLength} = this.state;
-        let deck = [...this.state.cards];
-        const card = deck[currentCard];
+  const [currentCard, setCurrentCard] = useState(0);
+  const [cards, setCards] = useState([...items]);
 
-        if (currentCard < cardsLength) {
-            switch (prop) {
-                case 'bad':
-                    deck.forEach(item => {
-                        if (item.id === card.id) {
-                            item.rating = 2;
-                            item.date = new Date();
-                        }
-                    });
-                    this.setState({
-                        cards: deck,
-                        currentCard: currentCard + 1
-                    });
-                    break;
-                case 'mid':
-                    deck.forEach(item => {
-                        if (item.id === card.id) {
-                            item.rating = 3;
-                            item.date = new Date();
-                        }
-                    });
-                    this.setState({
-                        cards: deck,
-                        currentCard: currentCard + 1
-                    });
-                    break;
-                case 'good':
-                    deck.forEach(item => {
-                        if (item.id === card.id) {
-                            item.rating = 4;
-                            item.date = new Date();
-                        }
-                    });
-                    this.setState({
-                        cards: deck,
-                        currentCard: currentCard + 1
-                    });
-                    break;
-                default:
-                    return;
+  const {updateRepetitionInStorage} = ScheduleAlgorithm(); 
+
+  useEffect(() => {
+    if (!cards) return;
+    updateRepetitionInStorage(cards, deckTitle);
+  }, [cards, deckTitle, updateRepetitionInStorage]);
+
+  
+  const onChangeRating = (prop) => {
+    const deck = [...cards];
+    const card = deck[currentCard];
+
+    if (currentCard < items.length) {
+      switch (prop) {
+        case 'bad':
+          deck.forEach(item => {
+            if (item.id === card.id) {
+              item.rating = 2;
+              item.date = new Date();
             }
-        }
-
+          });
+          setCards(deck);
+          setCurrentCard(currentCard + 1);
+          break;
+        case 'mid':
+          deck.forEach(item => {
+            if (item.id === card.id) {
+              item.rating = 3;
+              item.date = new Date();
+            }
+          });
+          setCards(deck);
+          setCurrentCard(currentCard + 1);
+          break;
+        case 'good':
+          deck.forEach(item => {
+            if (item.id === card.id) {
+              item.rating = 4;
+              item.date = new Date();
+            }
+          });
+          setCards(deck);
+          setCurrentCard(currentCard + 1);
+          break;
+        default:
+          return;
+      }
     }
 
-    render() {
+  }
 
-        const {currentCard, cardsLength} = this.state;
-        const {items} = this.props.deck;
-        const endMessage = <div className="card-container">
-                                <p>Learning Completed!</p>
-                           </div>;
-        const isLearning = currentCard < cardsLength ? <CurrentCard front={items[currentCard].front} back={items[currentCard].back}/> : endMessage;
+  const endMessage = "Learning Completed!";
+  const isLearning = currentCard < items.length
+  ? <CurrentCard repetitionMode={true} front={items[currentCard].front} back={items[currentCard].back} mode={mode}/>
+  : <CurrentCard repetitionMode={true} front={endMessage} back={endMessage}/>;
 
-        return (
-            <>
-                <div className="main-table">
-                    {isLearning}
-                </div>
-                <div className="edit-panel">
-                    <div className="buttons">
-                        <Button onClick={(e) => this.onChangeRating(e.target.getAttribute('data-type'))}
-                                variant="danger"
-                                data-type="bad">Again</Button>
-                        <Button onClick={(e) => this.onChangeRating(e.target.getAttribute('data-type'))}
-                                className="medium"
-                                variant="warning"
-                                data-type="mid">Good</Button>
-                        <Button onClick={(e) => this.onChangeRating(e.target.getAttribute('data-type'))}
-                                variant="success"
-                                data-type="good">Easy</Button>
-                    </div>
-                    <div className="all-in-one-page">
-                        <Button variant="secondary">Show all</Button>
-                    </div>
-                </div>
-            </>
-        );
-    }
+  return (
+    <>
+      <DeckInfo items={items}/>     
+        <div className="main-table">
+          {isLearning}
+        </div>
+        <div className="edit-panel">
+          {currentCard < items.length &&
+          <div className="buttons">
+            <Button 
+              onClick={(e) => onChangeRating(e.target.getAttribute('data-type'))}
+              variant="danger"
+              data-type="bad"
+            >
+              Again
+            </Button>
+            <Button 
+              onClick={(e) => onChangeRating(e.target.getAttribute('data-type'))}
+              className="medium"
+              variant="warning"
+              data-type="mid"
+            >
+              Good
+            </Button>
+            <Button 
+              onClick={(e) => onChangeRating(e.target.getAttribute('data-type'))}
+              variant="success"
+              data-type="good"
+            >
+              Easy
+            </Button>
+          </div>}
+        </div>
+    </>
+  );
+
 }
 
 export default MainTable;

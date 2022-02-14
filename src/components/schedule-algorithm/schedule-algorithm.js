@@ -1,35 +1,35 @@
 const store = require('store');
 
-class ScheduleAlgorithm {
+const ScheduleAlgorithm = () => {
 
-  findInterval = (currentDate, timestamp) => {
-    return Math.floor((currentDate.getTime() - new Date(timestamp).getTime()) / 60000);
+  const findInterval = (date, timestamp) => {
+    return Math.floor((date.getTime() - new Date(timestamp).getTime()) / 60000);
   }
 
-  selectRepetitionCards = (deckItems) => {
-    let currentDate = new Date();
+  const selectRepetitionCards = (deckItems) => {
+    const currentDate = new Date();
 
     let sortedDeck = [];
 
     deckItems.forEach(item => {
       switch (item.rating) {
         case 2:
-          if (this.findInterval(currentDate, item.date) >= 1) {
+          if (findInterval(currentDate, item.date) >= 1) {
             sortedDeck = [...sortedDeck, item];
           }
           break;
         case 3:
-          if (this.findInterval(currentDate, item.date) >= 10) {
+          if (findInterval(currentDate, item.date) >= 10) {
             sortedDeck = [...sortedDeck, item];
           }
           break;
         case 4:
-          if (this.findInterval(currentDate, item.date) >= 1440) {
+          if (findInterval(currentDate, item.date) >= 1440) {
             sortedDeck = [...sortedDeck, item];
           }
           break;
         case 5:
-          if (this.findInterval(currentDate, item.date) >= 10080) {
+          if (findInterval(currentDate, item.date) >= 10080) {
             sortedDeck = [...sortedDeck, item];
           }
           break;
@@ -42,7 +42,7 @@ class ScheduleAlgorithm {
     
   }
 
-  updateRepetitionInStorage = (deckItems, deckTitle) => {
+  const updateRepetitionInStorage = (deckItems, deckTitle) => {
     let deck = store.get(deckTitle);
     
     for (let i = 0; i < deckItems.length; i++) {
@@ -61,6 +61,8 @@ class ScheduleAlgorithm {
     store.set(deckTitle, deck);
   
   }
+
+  return {selectRepetitionCards, updateRepetitionInStorage};
 }
 
 export default ScheduleAlgorithm;

@@ -1,35 +1,35 @@
-import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
+import { Navbar, Nav, Container } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 
 import './header.css';
 
 const Header = () => {
-    return (
-      <Navbar className='header' variant="light" bg="#fcfcfc" expand="lg">
-        <Container fluid>
-          <LinkContainer to="/">
-            <Navbar.Brand>Memory Cardz</Navbar.Brand>
+  return (
+    <Navbar 
+      className='header' 
+      bg="light" 
+      variant="light"
+    >
+      <Container>
+        <LinkContainer to="/">
+          <Navbar.Brand href="#home">Memory Cardzzz</Navbar.Brand>
+        </LinkContainer>
+        <Navbar.Toggle aria-controls="justify-content-end" />
+        <Navbar.Collapse id="justify-content-end"></Navbar.Collapse>
+        <Nav className="me-auto">
+          <LinkContainer to="/select-deck">
+            <Nav.Link>Select Deck</Nav.Link>
           </LinkContainer>
-          <Navbar.Toggle aria-controls="navbar-dark-example" />
-          <Navbar.Collapse id="navbar-dark-example">
-            <Nav>
-              <NavDropdown
-                id="nav-dropdown-dark-example"
-                title="Menu"
-                menuVariant="dark"
-              >
-                <LinkContainer to="/select-deck">
-                    <NavDropdown.Item>Select Deck</NavDropdown.Item>
-                </LinkContainer>
-                <LinkContainer to="/create-deck">
-                    <NavDropdown.Item>Create Deck</NavDropdown.Item>
-                </LinkContainer>
-              </NavDropdown>
-            </Nav>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
-    );
+          <LinkContainer to="/create-deck">
+            <Nav.Link>Create Deck</Nav.Link>
+          </LinkContainer>
+          <LinkContainer to="/settings-page">
+            <Nav.Link>Settings</Nav.Link>
+          </LinkContainer>
+        </Nav>
+      </Container>
+    </Navbar>
+  );
 }
 
 export default Header;

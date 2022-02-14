@@ -1,128 +1,234 @@
-import { Component } from 'react';
+import CurrentCard from '../current-card/current-card';
+import { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import { Button } from 'react-bootstrap';
 
 import './create-deck.css';
 
 const store = require('store');
 
-class CreateDeck extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            front: '',
-            back: '',
-            items: [],
-            deckTitle: ''
-        };
+const CreateDeck = ({deck, clearState, editMode, onSetEditMode}) => {
+
+  const [items, setItems] = useState(deck.items);
+  const [deckTitle, setDeckTitle] = useState(deck.deckTitle);
+  const [cardModal, setCardModal] = useState(false);
+
+  const onAddToDeck = (front, back) => {
+    const newCard = {
+      front,
+      back,
+      rating: 1,
+      date: new Date(),
+      id: uuidv4()
+    };
+
+    setItems(items => [...items, newCard]);
+  }
+
+  useEffect(() => {
+    return () => {
+      onSetEditMode(false);
+    }
+  }, []);
+
+  const onAddDeckToLocalStorage = (key, values) => {
+    const deck = {
+      deckTitle: key,
+      items: [...values]
     }
 
-    onValueChange = (e) => {
-        this.setState({
-            [e.target.name]: e.target.value
-        });
-    }
+    store.set(key, deck);
 
-    onAddToDeck = (front, back) => {
-        const newCard = {
-            front,
-            back,
-            rating: 1,
-            date: new Date(),
-            id: uuidv4()
-        };
-        this.setState(({items}) => {
-            const newItems = [...items, newCard];
-            return {
-                items: newItems
-            }
-        });
-    }
+    setItems([]);
+    setDeckTitle('');
+  }
 
-    onAddDeckToLocalStorage = (key, values) => {
-        const deck = {
-            deckTitle: key,
-            items: [...values]
+  const onSubmitNewCard = (front, back) => {
+    if (front.length < 1 || back.length < 1) return;
+    onAddToDeck(front, back);
+  };
+
+  const onAddTitleToLocalStorage = (title) => {
+    const titles = store.get('titles');
+    if (titles.includes(title)) return;
+    if (titles) {
+      const newTitles = [...titles, title];
+      store.set('titles', newTitles);
+    } else {
+      const newTitles = [title];
+      store.set('titles', newTitles);
+    }
+  };
+
+  const onSubmitDeckTitle = (title) =>{
+    if (title.length < 1) return;
+    setDeckTitle(title);
+  };
+
+  const onSubmitNewDeck = () => {
+    onAddTitleToLocalStorage(deckTitle);
+    onAddDeckToLocalStorage(deckTitle, items);
+    clearState();
+  };
+
+  const onDeleteCard = (id) => {
+    console.log(id);
+    setItems(items => {
+      let newItems = [];
+      items.forEach((item, i) => {
+        if (id === i) {
+          newItems = [...items.slice(0, i), ...items.slice(i + 1)];
         }
+      });
+      return newItems;
+    });
+  };
 
-        store.set(key, deck);
-        
-        this.setState({
-            items: []
-        });
-    }
+  function renderCards(cardsArray) {
+    const items = cardsArray.map((item, i) => {
+      return <CurrentCard 
+               editMode={editMode} 
+               repetitionMode={false}
+               front={item.front} 
+               back={item.back} 
+               key={i}
+               onDeleteCard={onDeleteCard}
+               id={i}
+             />
+    });
 
-    onSubmitNewCard = (e) => {
-        e.preventDefault();
-        if (this.state.front.length < 1 || this.state.back.length < 1) return;
-        this.onAddToDeck(this.state.front, this.state.back);
-        this.setState({
-            front: '',
-            back: ''
-        });
-    }
+    return items;
+  }
 
-    onAddTitleToLocalStorage = (title) => {
-        if (store.get('titles')) {
-            const newTitles = [...store.get('titles'), title];
-            store.set('titles', newTitles);
-        } else {
-            const newTitles = [title];
-            store.set('titles', newTitles);
+  const cards = renderCards(items);
+  console.log(items);
+
+  const endEditingMessage = "Editing completed!";
+
+  const showDeckTitleModal = deckTitle || editMode
+  ? null 
+  : <DeckTitleModal onSubmitDeckTitle={onSubmitDeckTitle}/> ;
+
+  const showNewCardButton = deckTitle 
+  ? <NewCardButton setCardModal={setCardModal}/> 
+  : null;
+
+  const showCardModal = cardModal 
+  ? <CardModal 
+      cardModal={cardModal} 
+      setCardModal={setCardModal}
+      onSubmitNewCard={onSubmitNewCard}  
+    /> 
+  : null;
+
+  const showEndEditing = editMode && !deckTitle && !items.length
+  ? <CurrentCard 
+      front={endEditingMessage} 
+      back={endEditingMessage}
+    />
+  : null; 
+
+  return (
+    <>
+      <div className='deck-panel'>
+        <h1 
+          data-type='deck-title' 
+          onClick={(e) => console.log(e.currentTarget.getAttribute('data-type'))}>{deckTitle}</h1>
+        {deckTitle &&       
+          <Button onClick={() => onSubmitNewDeck(deckTitle, items)}>
+            Save
+          </Button>
         }
-    }
+      </div>
+      <div 
+        className="deck-container" 
+        style={
+          editMode && !deckTitle ? {'display':'flex'} : null
+        }
+      >
+        {showEndEditing}
+        {showDeckTitleModal}
+        {showNewCardButton}
+        {showCardModal}
+        {cards}
+      </div>
+    </>
+  );
+}
 
-    onSubmitNewDeck = (e) => {
-        e.preventDefault();
-        if (this.state.deckTitle.length < 1) return;
-        this.onAddDeckToLocalStorage(this.state.deckTitle, this.state.items);
-        this.onAddTitleToLocalStorage(this.state.deckTitle);
-        this.setState({
-            front: '',
-            back: '',
-            deckTitle: ''
-        });
-    }
+const DeckTitleModal = ({onSubmitDeckTitle}) => {
+  
+  return (
+    <>
+      <div className='deck-title-modal-container'>
+        <form className="add-form d-flex" onSubmit={(e) => {
+          e.preventDefault();
+          onSubmitDeckTitle(e.target.elements[0].value)
+        }}>
+          <input 
+            type="text"
+            className="form-control new-post-label"
+            placeholder="Name your deck"
+            name="deckTitle"
+          />
+          <Button 
+            type="submit" 
+            variant="danger" 
+            style={{'margin': '10px'}}>
+            Add
+          </Button>
+        </form>
+      </div>
+    </>
+  );
+  
+}
 
-    render() {
-        const {front, back, deckTitle} = this.state;
+const NewCardButton = ({setCardModal}) => {
+  return (
+    <div tabIndex={0} onClick={() => setCardModal(true)} className="new-card-button">
+      <h3>+ New card</h3>
+    </div>
+  );
+}
 
-        return (
-            <div className="app-add-form">
-                <h3>Добавьте новую карточку в колоду</h3>
-                <form
-                    className="add-form d-flex"
-                    onSubmit={this.onSubmitNewCard}>
-                    <input type="text"
-                        className="form-control new-post-label"
-                        placeholder="Введите слово на английском"
-                        name="front"
-                        value={front}
-                        onChange={this.onValueChange} />
-                    <input type="text"
-                        className="form-control new-post-label"
-                        placeholder="Введите слово на русском"
-                        name="back"
-                        value={back}
-                        onChange={this.onValueChange} />
-    
-                    <button type="submit"
-                            className="btn btn-outline-light">Добавить карточку</button>
-                </form>
-                <form
-                    className="add-form d-flex"
-                    onSubmit={this.onSubmitNewDeck}>
-                    <input type="text"
-                        className="form-control new-post-label"
-                        placeholder="Введите название колоды"
-                        name="deckTitle"
-                        value={deckTitle}
-                        onChange={this.onValueChange} />    
-                    <button type="submit"
-                            className="btn btn-outline-light">Завершить колоду</button>
-                </form>
-            </div>
-        );
-    }
+const CardModal = ({cardModal, setCardModal, onSubmitNewCard}) => {
+  if (cardModal) {
+    return (
+      <>
+        <div className="overlay" onClick={() => setCardModal(false)}/>
+        <div className='deck-title-modal-container' style={{'height':'200px'}}>
+          <form className="add-form d-flex" onSubmit={(e) => {
+            if (e.target.elements[0].value.length < 1 || e.target.elements[1].value.length < 1) return;
+            e.preventDefault();
+            onSubmitNewCard(e.target.elements[0].value, e.target.elements[1].value)
+            setCardModal(false);
+          }}>
+            <input 
+              type="text"
+              className="form-control new-post-label"
+              placeholder="Front"
+              name="deckTitle"
+            />
+            <input 
+              type="text"
+              className="form-control new-post-label"
+              placeholder="Back"
+              name="deckTitle"
+            />
+            <Button 
+              type="submit" 
+              variant="danger" 
+              style={{'margin': '10px'}}>
+              Add
+            </Button>
+          </form>
+        </div>
+      </>
+    );
+  } else {
+    return null;
+  }
 }
 
 export default CreateDeck;
