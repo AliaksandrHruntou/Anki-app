@@ -6,7 +6,7 @@ import DeckInfo from "../deck-info/deck-info";
 
 import './main-table.css';
 
-const MainTable = ({deck, mode}) => {
+const MainTable = ({deck, mode, clearState}) => {
 
   const {items, deckTitle} = deck;
 
@@ -20,11 +20,18 @@ const MainTable = ({deck, mode}) => {
     updateRepetitionInStorage(cards, deckTitle);
   }, [cards, deckTitle, updateRepetitionInStorage]);
 
+  useEffect(() => {
+    return () => {
+      console.log('clear state');
+      clearState();
+    }
+  }, [clearState]);
+
   
   const onChangeRating = (prop) => {
     const deck = [...cards];
     const card = deck[currentCard];
-
+    console.log(currentCard);
     if (currentCard < items.length) {
       switch (prop) {
         case 'bad':

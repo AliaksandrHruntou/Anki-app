@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Button, Badge } from "react-bootstrap";
 
 import './deck-info.css';
