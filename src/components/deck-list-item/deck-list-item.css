@@ -62,3 +62,8 @@
 .list-group-item.increase .btn-star {
     color: #aeaeae;
 }
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+}
