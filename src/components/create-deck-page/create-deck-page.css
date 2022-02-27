@@ -31,24 +31,7 @@
     border: 2px solid #505050;
     padding: 1.5em;
     border-radius: 0.5em;
-    height: 150px;
-    width: 300px;
-}
-
-.new-card-button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    font-size: 20px;
-    border-radius: 0.5em;
-    border: 2px dashed #505050;
-    background-color: #fcfcfc;
-    transform-style: preserve-3d;
-    color: #505050;
-    transition: 150ms;
-    cursor: pointer;
-    height: 150px;
+    height: 200px;
     width: 300px;
 }
 

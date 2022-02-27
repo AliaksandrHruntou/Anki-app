@@ -1,27 +1,27 @@
-import { LinkContainer } from "react-router-bootstrap";
 import { Button } from "react-bootstrap";
+import { LinkContainer } from "react-router-bootstrap";
 
-const DeckListItem = ({title, onSelectDeck, onDeleteDeck}) => {
+const DeckListItem = ({ title, onSelectDeck, onDeleteDeck }) => {
 
   return (
     <li className="list-group-item d-flex justify-content-between">
       <LinkContainer 
-        to="/main-table" 
-        onClick={() => onSelectDeck(title)}
-        style={{'cursor': 'pointer', 'marginTop': '15px'}}
+        to="/main-table-page" 
+        onClick={ () => onSelectDeck(title) }
+        style={ { 'cursor': 'pointer', 'marginTop': '15px' } }
       >
-        <span className="list-group-item-label" data-deck={title}>
-          {title}
+        <span className="list-group-item-label" data-deck={ title }>
+          { title }
         </span>
       </LinkContainer>
       <div className="button-container">
-        <LinkContainer to="/create-deck" onClick={() => onSelectDeck(title, true)}>
+        <LinkContainer to="/edit-deck-page" onClick={ () => onSelectDeck(title, true) }>
           <Button variant="secondary">Edit</Button>
         </LinkContainer>
         <Button 
           variant="danger" 
-          style={{'marginLeft': '20px'}}
-          onClick={() => onDeleteDeck(title)}
+          style={ { 'marginLeft': '20px' } }
+          onClick={ () => onDeleteDeck(title) }
         >Delete</Button>
       </div>
     </li>

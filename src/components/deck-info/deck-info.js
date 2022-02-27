@@ -1,8 +1,8 @@
-import { Button, Badge } from "react-bootstrap";
+import { Badge, Button } from "react-bootstrap";
 
 import './deck-info.css';
 
-const DeckInfo = ({items}) => {
+const DeckInfo = ({ items }) => {
 
   const renderInfo = (items) => {
     const info = {
@@ -20,23 +20,25 @@ const DeckInfo = ({items}) => {
       }
     });
     return info;
-  }
+  };
+
+  //добавить полную обработку 
   
   const deckInfo = renderInfo(items);
 
   return (
     <div className="deck-info">
       <Button variant="primary">
-        New <Badge bg="secondary">{deckInfo.new}</Badge>
+        New <Badge bg="secondary">{ deckInfo.new }</Badge>
       </Button>
       <Button variant="warning">
-        Learning <Badge bg="secondary">{deckInfo.inProcess}</Badge>
+        Learning <Badge bg="secondary">{ deckInfo.inProcess }</Badge>
       </Button>
       <Button variant="success">
-        Learned <Badge bg="secondary">{deckInfo.learned}</Badge>
+        Learned <Badge bg="secondary">{ deckInfo.learned }</Badge>
       </Button>
     </div>
   );
-}
+};
 
 export default DeckInfo;

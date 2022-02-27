@@ -1,12 +1,16 @@
-import MainTable from './components/main-table/main-table'
-import Header from './components/header/header';
-import SelectDeck from './components/select-deck/select-deck';
-import CreateDeck from './components/create-deck/create-deck';
 import { useState } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import ScheduleAlgorithm from './components/schedule-algorithm/schedule-algorithm'; 
+import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
+
+import AppHeader from './components/app-header/app-header';
+
+import MainPage from './components/main-page/main-page';
+import SelectDeckPage from './components/select-deck-page/select-deck-page';
+import CreateDeckPage from './components/create-deck-page/create-deck-page';
 import SettingsPage from './components/settings-page/settings-page';
-import WelcomePage from './components/welcome-page/welcome-page';
+import MainTablePage from './components/main-table-page/main-table-page';
+import EditDeckPage from './components/edit-deck-page/edit-deck-page';
+
+import ScheduleAlgorithm from './hooks/schedule-algorithm'; 
 
 import './app.css';
 
@@ -22,7 +26,7 @@ const App = () => {
     items: []
   });
 
-  const {selectRepetitionCards} = ScheduleAlgorithm();
+  const { selectRepetitionCards } = ScheduleAlgorithm();
 
   const onSelectDeck = (title, editMode) => {
     setEditMode(editMode);
@@ -31,14 +35,6 @@ const App = () => {
       selectedDeck.items = selectRepetitionCards(selectedDeck.items);
     } 
     setDeck(selectedDeck);
-  };
-
-  const onSetEditMode = (mode) => {
-    setEditMode(mode);
-  };
-
-  const onSetMode = (mode) => {
-    setMode(mode);
   };
 
   const clearState = () => {
@@ -51,37 +47,44 @@ const App = () => {
   return (
     <Router>
       <div className="app">
-        <Header/>
+        <AppHeader/>
         <Switch>
           <Route exact path="/">
-            <WelcomePage/>
+            <MainPage/>
           </Route>
-          <Route exact path="/select-deck">
-            <SelectDeck onSelectDeck={onSelectDeck}/>
+          <Route exact path="/select-deck-page">
+            <SelectDeckPage onSelectDeck={ onSelectDeck }/>
           </Route>
-          <Route exact path="/create-deck">
-            <CreateDeck 
-              deck={deck} 
-              clearState={clearState} 
-              editMode={editMode}
-              onSetEditMode={onSetEditMode}
-            />
-          </Route>
-          <Route exact path="/main-table">
-            <MainTable 
-              deck={deck} 
-              clearState={clearState}
-              mode={mode}
-              setDeck={setDeck}
+          <Route exact path="/create-deck-page">
+            <CreateDeckPage 
+              deck={ deck } 
+              clearState={ clearState }
+              onSetEditMode={ (mode) => setEditMode(mode) }
             />
           </Route>
           <Route exact path="/settings-page">
-            <SettingsPage onSetMode={onSetMode}/>
+            <SettingsPage onSetMode={ (mode) => setMode(mode) }/>
+          </Route>
+          <Route exact path="/main-table-page">
+            <MainTablePage 
+              deck={ deck } 
+              clearState={ clearState }
+              mode={ mode }
+              setDeck={ setDeck }
+            />
+          </Route>
+          <Route exact path="/edit-deck-page">
+            <EditDeckPage
+              deck={ deck } 
+              clearState={ clearState } 
+              editMode={ editMode }
+              onSetEditMode={ (mode) => setEditMode(mode) }
+            />
           </Route>
         </Switch>
       </div>
     </Router>
   );
-}
+};
 
 export default App;

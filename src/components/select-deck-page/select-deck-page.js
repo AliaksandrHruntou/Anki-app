@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import DeckListItem from '../deck-list-item/deck-list-item';
 
-import './select-deck';
+import './select-deck-page.css';
 
 const store = require('store');
 
-const SelectDeck = ({onSelectDeck}) => {
+const SelectDeckPage = ({ onSelectDeck }) => {
 
   const [titles, setTitles] = useState(store.get('titles'));
 
@@ -19,16 +19,16 @@ const SelectDeck = ({onSelectDeck}) => {
     });
     setTitles((titles) => titles.filter(item => item !== title));
     store.set('titles', titles);
-  }
+  };
 
   function renderItems(titles) {
     const items = titles.map(item => {
       return (
         <DeckListItem 
-          title={item} 
-          key={item} 
-          onSelectDeck={onSelectDeck}
-          onDeleteDeck={onDeleteDeck}
+          title={ item } 
+          key={ item } 
+          onSelectDeck={ onSelectDeck }
+          onDeleteDeck={ onDeleteDeck }
         />
       );
     });
@@ -45,11 +45,11 @@ const SelectDeck = ({onSelectDeck}) => {
       <div className="app-info">
         <h2>Select deck to learn</h2>
       </div>
-      <ul className="app-list list-group" style={{'border': '2px solid #505050'}}>
-        {elements}
+      <ul className="app-list list-group" style={ { 'border': '2px solid #505050' } }>
+        { elements }
       </ul>
     </>
   );
 };
 
-export default SelectDeck;
+export default SelectDeckPage;
