@@ -2,9 +2,9 @@ import { FC } from "react";
 import { Button } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { useAuth } from "../../../contexts/auth-context";
-import useFirestore from "../../../hooks/firestore";
-import useScheduleAlgorithm from "../../../hooks/schedule-algorithm";
-import { DeckAppType } from "../../../types/types";
+import useFirestore from "../../../../hooks/firestore";
+import useScheduleAlgorithm from "../../../../hooks/schedule-algorithm";
+import { DeckAppType } from "../../../../types/types";
 
 type DeckListItemPropsType = {
   deck: DeckAppType

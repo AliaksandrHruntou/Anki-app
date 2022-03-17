@@ -2,15 +2,15 @@ import { FC, useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { v4 as uuidv4 } from 'uuid';
 
-import FlashCard from '../common/card/flashcard';
-import Modal from '../common/modal/modal';
-import NewCardButton from '../common/new-card-button/new-card-button';
-import DeckTitleModal from '../common/deck-title-modal/deck-title-modal';
+import FlashCard from '../../common/card/flashcard';
+import Modal from '../../common/modal/modal';
+import NewCardButton from '../../common/new-card-button/new-card-button';
+import DeckTitleModal from '../../common/deck-title-modal/deck-title-modal';
 
 import './create-deck-page.css';
-import useFirestore from '../../hooks/firestore';
+import useFirestore from '../../../hooks/firestore';
 import { useAuth } from '../../contexts/auth-context';
-import { ItemType } from '../../types/types';
+import { ItemType } from '../../../types/types';
 
 const CreateDeckPage: FC = () => {
 

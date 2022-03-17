@@ -1,45 +1,37 @@
-import { useState, FC } from 'react';
-import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
+import { FC } from 'react';
+import { 
+  Route, 
+  BrowserRouter as Router, 
+  Switch 
+} from 'react-router-dom';
 
-import AppHeader from './components/app-header/app-header';
-import Signup from './components/authentication/Signup';
+import AppHeader from './components/common/app-header/app-header';
 
-import MainPage from './components/main-page/main-page';
-import SelectDeckPage from './components/select-deck-page/select-deck-page';
-import CreateDeckPage from './components/create-deck-page/create-deck-page';
-import SettingsPage from './components/settings-page/settings-page';
-import MainTablePage from './components/main-table-page/main-table-page';
-import EditDeckPage from './components/edit-deck-page/edit-deck-page';
+import { 
+  CreateDeckPage, 
+  EditDeckPage, 
+  MainPage, 
+  MainTablePage, 
+  SelectDeckPage, 
+  SettingsPage
+} from './components/pages'
+
+import { 
+  Dashboard, 
+  ForgotPassword, 
+  Login, 
+  PrivateRoute, 
+  Signup, 
+  UpdateProfile 
+} from './components/authentication'
+
+import { useAuth } from './components/contexts/auth-context';
 
 import './app.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import { useAuth } from './contexts/auth-context';
-import Dashboard from './components/authentication/Dashboard'
-import Login from './components/authentication/Login';
-import PrivateRoute from './components/authentication/PrivateRoute';
-import ForgotPassword from './components/authentication/forgot-password';
-import UpdateProfile from './components/authentication/update-profile';
-import { DeckType } from './types/types';
-
 const App: FC = () => {
-  
-  const { 
-    currentUser,
-    mode
-  } = useAuth();
- 
-  const [currentDeck, setCurrentDeck] = useState<DeckType>({
-    deckTitle: '',
-    items: []
-  });
-
-  const clearState = (): void => {
-    setCurrentDeck({
-      deckTitle: '',
-      items: []
-    });
-  };
+  const { currentUser } = useAuth();
 
   return (
     <Router>
@@ -60,14 +52,10 @@ const App: FC = () => {
               <SettingsPage/>
             </PrivateRoute>
             <PrivateRoute exact path="/main-table-page">
-              <MainTablePage 
-                mode={ mode }
-              />
+              <MainTablePage/>
             </PrivateRoute>
             <PrivateRoute exact path="/edit-deck-page">
-              <EditDeckPage
-                clearState={ clearState }
-              />
+              <EditDeckPage/>
             </PrivateRoute>
             <PrivateRoute exact path="/Dashboard">
               <Dashboard/>  

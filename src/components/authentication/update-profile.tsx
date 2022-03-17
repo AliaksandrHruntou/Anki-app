@@ -1,9 +1,9 @@
 import React, { FormEvent, useRef, useState } from "react"
 import { Form, Button, Card, Alert } from "react-bootstrap"
-import { useAuth } from '../../contexts/auth-context';
+import { useAuth } from '../contexts/auth-context';
 import { Link, useHistory } from "react-router-dom"
 
-export default function UpdateProfile() {
+const UpdateProfile = () => {
   const emailRef = useRef<HTMLInputElement>(null)
   const passwordRef = useRef<HTMLInputElement>(null)
   const passwordConfirmRef = useRef<HTMLInputElement>(null)
@@ -12,7 +12,7 @@ export default function UpdateProfile() {
   const [loading, setLoading] = useState(false)
   const history = useHistory()
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (passwordRef.current?.value !== passwordConfirmRef.current?.value) {
       return setError("Passwords do not match")
@@ -85,3 +85,5 @@ export default function UpdateProfile() {
     </>
   )
 }
+
+export default UpdateProfile

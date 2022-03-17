@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { Badge, Button } from "react-bootstrap";
-import { ItemType } from "../../../types/types";
+import { ItemType } from "../../../../types/types";
 
 import './deck-info.css';
 

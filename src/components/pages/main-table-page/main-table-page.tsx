@@ -1,22 +1,16 @@
 import { FC, useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
-import FlashCard from "../common/card/flashcard";
+import FlashCard from "../../common/card/flashcard";
 import DeckInfo from "./deck-info/deck-info";
-import useScheduleAlgorithm from "../../hooks/schedule-algorithm";
+import useScheduleAlgorithm from "../../../hooks/schedule-algorithm";
 
 import './main-table-page.css';
-import { DeckType } from "../../types/types";
 import { useAuth } from "../../contexts/auth-context";
-import useFirestore from "../../hooks/firestore";
+import useFirestore from "../../../hooks/firestore";
 
-type MainTablePagePropsType = {
-  mode: string
-}
-const MainTablePage: FC<MainTablePagePropsType> = ({
-  mode
-}) => {
+const MainTablePage: FC = () => {
   const { updateDeck } = useFirestore();
-  const { currentDeck } = useAuth();
+  const { currentDeck, mode } = useAuth();
   const { items, deckTitle } = currentDeck;
 
   const [currentCard, setCurrentCard] = useState(0);

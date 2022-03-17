@@ -2,23 +2,16 @@ import { FC, ReactElement, useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { v4 as uuidv4 } from 'uuid';
 import { useAuth } from '../../contexts/auth-context';
-import useFirestore from '../../hooks/firestore';
-import { ItemType } from '../../types/types';
+import useFirestore from '../../../hooks/firestore';
+import { ItemType } from '../../../types/types';
 
-import FlashCard from '../common/card/flashcard';
-import Modal from '../common/modal/modal';
-import NewCardButton from '../common/new-card-button/new-card-button';
+import FlashCard from '../../common/card/flashcard';
+import Modal from '../../common/modal/modal';
+import NewCardButton from '../../common/new-card-button/new-card-button';
 
 import './edit-deck-page.css';
 
-
-type EditDeckPagePropsType = {
-  clearState: () => void
-}
-
-const EditDeckPage: FC<EditDeckPagePropsType> = ({
-  clearState 
-}) => {
+const EditDeckPage: FC = () => {
 
   const { currentDeck, editMode, setEditMode } = useAuth();
   const { updateDeck } = useFirestore();
@@ -58,7 +51,6 @@ const EditDeckPage: FC<EditDeckPagePropsType> = ({
 
   const onSubmitNewDeck = (deckId: string, items: ItemType[]) => {
     onAddUpdatedDeckToFirestore(deckId, items);
-    clearState();
   };
 
   const onDeleteCard = (id: number) => {

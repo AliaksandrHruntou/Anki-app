@@ -1,16 +1,16 @@
 import React, { FormEvent, useRef, useState } from "react"
 import { Form, Button, Card, Alert } from "react-bootstrap"
-import { useAuth } from '../../contexts/auth-context';
+import { useAuth } from '../contexts/auth-context';
 import { Link } from "react-router-dom"
 
-export default function ForgotPassword() {
+const ForgotPassword = () => {
   const emailRef = useRef<HTMLInputElement>(null)
   const { resetPassword } = useAuth()
   const [error, setError] = useState("")
   const [message, setMessage] = useState("")
   const [loading, setLoading] = useState(false)
 
-  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     try {
@@ -53,3 +53,5 @@ export default function ForgotPassword() {
     </>
   )
 }
+
+export default ForgotPassword

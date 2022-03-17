@@ -1,8 +1,8 @@
 import { FC, useEffect, useState } from 'react';
 import { useAuth } from '../../contexts/auth-context';
-import useFirestore from '../../hooks/firestore';
-import { DeckAppType } from '../../types/types';
-import Spinner from '../common/spinner/spinner';
+import useFirestore from '../../../hooks/firestore';
+import { DeckAppType } from '../../../types/types';
+import Spinner from '../../common/spinner/spinner';
 import DeckListItem from './deck-list-item/deck-list-item';
 
 import './select-deck-page.css';

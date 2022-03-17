@@ -1,7 +1,7 @@
 import { FC, FormEvent, useRef, useState } from 'react';
 import { Form, Button, Card, Alert } from 'react-bootstrap';
 import { Link, useHistory } from 'react-router-dom';
-import { useAuth } from '../../contexts/auth-context';
+import { useAuth } from '../contexts/auth-context';
 
 const Signup: FC = () => {
   const [error, setError] = useState<string>('');

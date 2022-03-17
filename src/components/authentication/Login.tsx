@@ -1,9 +1,9 @@
 import React, { FormEvent, useRef, useState } from "react"
 import { Form, Button, Card, Alert } from "react-bootstrap"
-import { useAuth } from '../../contexts/auth-context';
+import { useAuth } from '../contexts/auth-context';
 import { Link, useHistory } from "react-router-dom"
 
-export default function Login() {
+const Login = () => {
   const emailRef = useRef<HTMLInputElement>(null)
   const passwordRef = useRef<HTMLInputElement>(null)
   const { login } = useAuth()
@@ -11,7 +11,7 @@ export default function Login() {
   const [loading, setLoading] = useState(false)
   const history = useHistory()
 
-  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     try {
@@ -56,3 +56,5 @@ export default function Login() {
     </>
   )
 }
+
+export default Login

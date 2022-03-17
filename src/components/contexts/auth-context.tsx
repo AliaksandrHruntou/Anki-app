@@ -1,8 +1,8 @@
 import { createUserWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signOut, updateEmail } from 'firebase/auth';
 import { createContext, useContext, useState, useEffect, FC } from 'react';
-import { auth } from '../db/firebase-config';
-import useFirestore from '../hooks/firestore';
-import { DeckAppType } from '../types/types';
+import { auth } from '../../db/firebase-config';
+import useFirestore from '../../hooks/firestore';
+import { DeckAppType } from '../../types/types';
 
 const AuthContext = createContext<any | null>(null)
 
