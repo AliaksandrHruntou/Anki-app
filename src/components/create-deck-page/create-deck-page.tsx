@@ -1,24 +1,28 @@
-import { useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { v4 as uuidv4 } from 'uuid';
 
-import Card from '../common/card/card';
+import FlashCard from '../common/card/flashcard';
 import Modal from '../common/modal/modal';
 import NewCardButton from '../common/new-card-button/new-card-button';
 import DeckTitleModal from '../common/deck-title-modal/deck-title-modal';
 
 import './create-deck-page.css';
+import useFirestore from '../../hooks/firestore';
+import { useAuth } from '../../contexts/auth-context';
+import { ItemType } from '../../types/types';
 
-const store = require('store');
+const CreateDeckPage: FC = () => {
 
-const CreateDeckPage = () => {
-
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState<ItemType[]>([]);
   const [deckTitle, setDeckTitle] = useState("");
   const [cardModal, setCardModal] = useState(false);
 
-  const onAddToDeck = (front, back) => {
-    const newCard = {
+  const { createDeck } = useFirestore();
+  const { currentUser } = useAuth();
+
+  const onAddToDeck = (front: string, back: string) => {
+    const newCard: ItemType = {
       front,
       back,
       rating: 1,
@@ -29,49 +33,37 @@ const CreateDeckPage = () => {
     setItems(items => [...items, newCard]);
   };
 
-  const onAddDeckToLocalStorage = (key, values) => {
+  const onAddDeckToFirestore = (key: string, values: ItemType[]) => {
     const deck = {
       deckTitle: key,
-      items: [...values]
+      items: [...values],
+      userId: currentUser.uid
     };
 
-    store.set(key, deck);
+    createDeck(deck);
 
     setItems([]);
     setDeckTitle('');
   };
 
-  const onSubmitNewCard = (front, back) => {
+  const onSubmitNewCard = (front: string, back: string) => {
     if (front.length < 1 || back.length < 1) return;
     onAddToDeck(front, back);
   };
 
-  const onAddTitleToLocalStorage = (title) => {
-    const titles = store.get('titles');
-    if (titles.includes(title)) return;
-    if (titles) {
-      const newTitles = [...titles, title];
-      store.set('titles', newTitles);
-    } else {
-      const newTitles = [title];
-      store.set('titles', newTitles);
-    }
-  };
-
-  const onSubmitDeckTitle = (title) =>{
+  const onSubmitDeckTitle = (title: string) =>{
     if (title.length < 1) return;
     setDeckTitle(title);
   };
 
-  const onSubmitNewDeck = () => {
-    onAddTitleToLocalStorage(deckTitle);
-    onAddDeckToLocalStorage(deckTitle, items);
+  const onSubmitNewDeck = (deckTitle: string, items: ItemType[]) => {
+    onAddDeckToFirestore(deckTitle, items);
   };
 
-  const onDeleteCard = (id) => {
+  const onDeleteCard: (id: number) => void = (id) => {
     console.log(id);
     setItems(items => {
-      let newItems = [];
+      let newItems: ItemType[] = [];
       items.forEach((item, i) => {
         if (id === i) {
           newItems = [...items.slice(0, i), ...items.slice(i + 1)];
@@ -81,9 +73,9 @@ const CreateDeckPage = () => {
     });
   };
 
-  const renderCards = cardsArray => {
+  const renderCards = (cardsArray: ItemType[]) => {
     const items = cardsArray.map((item, i) => {
-      return <Card
+      return <FlashCard
         repetitionMode={ false }
         front={ item.front } 
         back={ item.back } 

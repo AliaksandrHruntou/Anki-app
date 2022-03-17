@@ -1,27 +1,33 @@
-import { useEffect, useState } from 'react';
+import { FC, ReactElement, useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { v4 as uuidv4 } from 'uuid';
+import { useAuth } from '../../contexts/auth-context';
+import useFirestore from '../../hooks/firestore';
+import { ItemType } from '../../types/types';
 
-import Card from '../common/card/card';
+import FlashCard from '../common/card/flashcard';
 import Modal from '../common/modal/modal';
 import NewCardButton from '../common/new-card-button/new-card-button';
 
 import './edit-deck-page.css';
 
-const store = require('store');
 
-const EditDeckPage = ({
-  deck, 
-  clearState, 
-  editMode, 
-  onSetEditMode 
+type EditDeckPagePropsType = {
+  clearState: () => void
+}
+
+const EditDeckPage: FC<EditDeckPagePropsType> = ({
+  clearState 
 }) => {
 
-  const [items, setItems] = useState(deck.items);
-  const [deckTitle, setDeckTitle] = useState(deck.deckTitle);
+  const { currentDeck, editMode, setEditMode } = useAuth();
+  const { updateDeck } = useFirestore();
+
+  const [items, setItems] = useState<ItemType[]>(currentDeck.items);
+  const [deckTitle, setDeckTitle] = useState(currentDeck.deckTitle);
   const [cardModal, setCardModal] = useState(false);
 
-  const onAddToDeck = (front, back) => {
+  const onAddToDeck = (front: string, back: string) => {
     const newCard = {
       front,
       back,
@@ -32,55 +38,32 @@ const EditDeckPage = ({
 
     setItems(items => [...items, newCard]);
   };
-  //how to work useEffect
-  useEffect(() => {
-    onSetEditMode(false);
-  }, [onSetEditMode]);
+  
+  useEffect(() => {//how to work useEffect
+    setEditMode(false);
+  }, [setEditMode]);
 
-  const onAddDeckToLocalStorage = (key, values) => {
-    const deck = {
-      deckTitle: key,
-      items: [...values]
-    };
+  const onAddUpdatedDeckToFirestore = (deckId: string, items: ItemType[]) => {
 
-    store.set(key, deck);
+    updateDeck(deckId, items);
 
     setItems([]);
     setDeckTitle('');
   };
 
-  const onSubmitNewCard = (front, back) => {
+  const onSubmitNewCard = (front: string, back: string) => {
     if (front.length < 1 || back.length < 1) return;
     onAddToDeck(front, back);
   };
 
-  const onAddTitleToLocalStorage = (title) => {
-    const titles = store.get('titles');
-    if (titles.includes(title)) return;
-    if (titles) {
-      const newTitles = [...titles, title];
-      store.set('titles', newTitles);
-    } else {
-      const newTitles = [title];
-      store.set('titles', newTitles);
-    }
-  };
-
-  const onSubmitDeckTitle = (title) =>{
-    if (title.length < 1) return;
-    setDeckTitle(title);
-  };
-
-  const onSubmitNewDeck = () => {
-    onAddTitleToLocalStorage(deckTitle);
-    onAddDeckToLocalStorage(deckTitle, items);
+  const onSubmitNewDeck = (deckId: string, items: ItemType[]) => {
+    onAddUpdatedDeckToFirestore(deckId, items);
     clearState();
   };
 
-  const onDeleteCard = (id) => {
-    console.log(id);
+  const onDeleteCard = (id: number) => {
     setItems(items => {
-      let newItems = [];
+      let newItems: Array<ItemType> = [];
       items.forEach((item, i) => {
         if (id === i) {
           newItems = [...items.slice(0, i), ...items.slice(i + 1)];
@@ -90,9 +73,9 @@ const EditDeckPage = ({
     });
   };
 
-  const renderCards = cardsArray => {
+  const renderCards = (cardsArray: ItemType[]): ReactElement[]=> {
     const items = cardsArray.map((item, i) => {
-      return <Card 
+      return <FlashCard 
         editMode={ editMode } 
         repetitionMode={ false }
         front={ item.front } 
@@ -119,21 +102,21 @@ const EditDeckPage = ({
       onSubmitNewCard={ onSubmitNewCard }  
     />;
 
-  const showEndEditing = editMode && !deckTitle && !items.length
-    ? <Card 
-      front={ endEditingMessage } 
-      back={ endEditingMessage }
-    />
-    : null; 
+  // const showEndEditing = editMode && !deckTitle && !items.length
+  //   ? <FlashCard 
+  //     front={ endEditingMessage } 
+  //     back={ endEditingMessage }
+  //   />
+  //   : null; 
 
   return (
     <>
       <div className='deck-panel'>
         <h1 
           data-type='deck-title' 
-          onClick={ (e) => console.log(e.currentTarget.getAttribute('data-type')) }>{ deckTitle }</h1>
+          onClick={ (e) => console.log(e.currentTarget.getAttribute('data-type')) }>{ currentDeck.deckTitle }</h1>
         { deckTitle &&       
-          <Button onClick={ () => onSubmitNewDeck(deckTitle, items) }>
+          <Button onClick={ () => onSubmitNewDeck(currentDeck.deckId, items) }>
             Save
           </Button>
         }
@@ -141,10 +124,10 @@ const EditDeckPage = ({
       <div 
         className="deck-container" 
         style={
-          editMode && !deckTitle ? { 'display':'flex' } : null
+          editMode && !deckTitle ? { 'display':'flex' } : {}
         }
       >
-        { showEndEditing }
+        {/* { showEndEditing } */}
         { showNewCardButton }
         { showCardModal }
         { cards }

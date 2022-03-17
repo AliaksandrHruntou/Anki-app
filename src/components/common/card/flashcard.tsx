@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { FC, useState } from "react";
+import { FlashCardPropsType } from "../../../types/types";
 
-import './card.css';
+import './flashcard.css';
 
-const Card = ({
+
+
+const FlashCard: FC<FlashCardPropsType> = ({
   id, 
   front, 
   back, 
@@ -34,7 +37,7 @@ const Card = ({
       </div>
     </>;
 
-  const selectTemplate = (mode) => {
+  const selectTemplate = (mode: string | null | undefined) => {
     switch (mode) {
     case 'Front/Back':
       return frontBack;
@@ -53,7 +56,7 @@ const Card = ({
   const className =
     editMode || !repetitionMode
       ? 'edit-mode-card'
-      : `card ${flip ? 'flip' : ''}`;
+      : `flashcard ${flip ? 'flip' : ''}`;
 
   return (
     <div className='container'>
@@ -71,4 +74,4 @@ const Card = ({
   );
 };
 
-export default Card;
+export default FlashCard;

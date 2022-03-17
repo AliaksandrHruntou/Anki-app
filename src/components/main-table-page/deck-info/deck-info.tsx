@@ -1,11 +1,23 @@
+import { FC } from "react";
 import { Badge, Button } from "react-bootstrap";
+import { ItemType } from "../../../types/types";
 
 import './deck-info.css';
 
-const DeckInfo = ({ items }) => {
+type DeckInfoPropsType = {
+  items: Array<ItemType>
+}
 
-  const renderInfo = (items) => {
-    const info = {
+type InfoType = {
+  new: number
+  inProcess: number
+  learned: number
+}
+
+const DeckInfo: FC<DeckInfoPropsType> = ({ items }) => {
+
+  const renderInfo = (items: Array<ItemType>): InfoType => {
+    const info: InfoType = {
       new: 0,
       inProcess: 0,
       learned: 0

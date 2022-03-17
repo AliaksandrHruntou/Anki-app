@@ -1,37 +1,43 @@
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
-import Card from "../common/card/card";
-import DeckInfo from "../deck-info/deck-info";
+import FlashCard from "../common/card/flashcard";
+import DeckInfo from "./deck-info/deck-info";
 import useScheduleAlgorithm from "../../hooks/schedule-algorithm";
 
 import './main-table-page.css';
+import { DeckType } from "../../types/types";
+import { useAuth } from "../../contexts/auth-context";
+import useFirestore from "../../hooks/firestore";
 
-const MainTablePage = ({ deck, mode, clearState }) => {
-
-  const { items, deckTitle } = deck;
+type MainTablePagePropsType = {
+  mode: string
+}
+const MainTablePage: FC<MainTablePagePropsType> = ({
+  mode
+}) => {
+  const { updateDeck } = useFirestore();
+  const { currentDeck } = useAuth();
+  const { items, deckTitle } = currentDeck;
 
   const [currentCard, setCurrentCard] = useState(0);
   const [cards, setCards] = useState(items);
 
-  const { updateRepetitionInStorage } = useScheduleAlgorithm(); 
+  const { updateRepetitionInStorage } = useScheduleAlgorithm();
 
-  useEffect(() => {
-    if (cards) {
-      updateRepetitionInStorage(cards, deckTitle);
-    }
-  }, [cards, deckTitle, updateRepetitionInStorage]);
+  // useEffect(() => {
+  //   if (cards) {
+  //     updateRepetitionInStorage(cards, deckTitle);
+  //   }
+  // }, [cards, deckTitle, updateRepetitionInStorage]);
 
-  useEffect(() => {
-    return () => {
-      clearState();
-    };
-  }, [clearState]);
+
   
-  const onChangeRating = (prop) => {
+  const onChangeRating = (prop: string) => {
     const deck = [...cards];
     const card = deck[currentCard];
-    console.log(currentCard);
-    if (currentCard < items.length) {
+    console.log('current card: ', currentCard);
+    console.log('cards count: ', cards.length);
+    if (currentCard < cards.length) {
       switch (prop) {
       case 'bad':
         deck.forEach(item => {
@@ -68,34 +74,45 @@ const MainTablePage = ({ deck, mode, clearState }) => {
       }
     }
 
+    if (currentCard === cards.length - 1) {
+      console.log(cards);
+      updateDeck(currentDeck.deckId, cards);
+    }
+
   };
 
   const endMessage = "Learning Completed!";
-  const isLearning = currentCard < items.length;
+  const isLearning = currentCard < cards.length;
 
   return (
     <>
-      <DeckInfo items={ items }/>     
+      <DeckInfo items={ cards }/>     
       <div className="main-table">
-        <Card 
+        <FlashCard
+          id={1}
+          onDeleteCard={() => console.log('hi')}
           repetitionMode={ true } 
-          front={ isLearning ? items[currentCard].front : endMessage }
-          back={ isLearning ? items[currentCard].back : endMessage }
+          front={ isLearning ? cards[currentCard].front : endMessage }
+          back={ isLearning ? cards[currentCard].back : endMessage }
           mode={ isLearning ? mode : null }
         />
       </div>
       <div className="edit-panel">
-        { currentCard < items.length &&
+        { currentCard < cards.length &&
           <div className="buttons">
             <Button 
-              onClick={ (e) => onChangeRating(e.target.getAttribute('data-type')) }
+              onClick={
+                (e: any) => onChangeRating(e.target.getAttribute('data-type'))
+              }
               variant="danger"
               data-type="bad"
             >
               Again
             </Button>
             <Button 
-              onClick={ (e) => onChangeRating(e.target.getAttribute('data-type')) }
+              onClick={
+                (e: any) => onChangeRating(e.target.getAttribute('data-type'))
+              }
               className="medium"
               variant="warning"
               data-type="mid"
@@ -103,7 +120,9 @@ const MainTablePage = ({ deck, mode, clearState }) => {
               Good
             </Button>
             <Button 
-              onClick={ (e) => onChangeRating(e.target.getAttribute('data-type')) }
+              onClick={
+                (e: any) => onChangeRating(e.target.getAttribute('data-type'))
+              }
               variant="success"
               data-type="good"
             >

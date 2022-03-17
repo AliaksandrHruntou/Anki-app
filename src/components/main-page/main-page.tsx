@@ -1,11 +1,14 @@
-import { useState } from 'react';
+import { FC, useState } from 'react';
 import { Button } from "react-bootstrap";
 import { LinkContainer } from 'react-router-bootstrap';
+import { useAuth } from '../../contexts/auth-context';
 
 import './main-page.css';
 
-const MainPage = () => {
+const MainPage: FC = () => {
   const [flip, setFlip] = useState(false); 
+
+  const { currentUser } = useAuth();
 
   const learningButton = <LinkContainer to="/select-deck-page">
     <Button variant='success' size='sm'>learning</Button>
@@ -22,7 +25,7 @@ const MainPage = () => {
         onClick={ () => setFlip(!flip) }
       >
         <div className="front">
-          <b>Hello, Alex!</b>
+          <b>Hello, {currentUser.email}!</b>
           <br/>
           <p>click to explore</p>
         </div>

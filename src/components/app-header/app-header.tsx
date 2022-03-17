@@ -1,9 +1,10 @@
+import { FC } from 'react';
 import { Container, Nav, Navbar } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 
 import './app-header.css';
 
-const AppHeader = () => {
+const AppHeader: FC = () => {
   return (
     <Navbar 
       className='header' 
@@ -25,6 +26,9 @@ const AppHeader = () => {
           </LinkContainer>
           <LinkContainer to="/settings-page">
             <Nav.Link>Settings</Nav.Link>
+          </LinkContainer>
+          <LinkContainer to="/Dashboard">
+            <Nav.Link>My Profile</Nav.Link>
           </LinkContainer>
         </Nav>
       </Container>

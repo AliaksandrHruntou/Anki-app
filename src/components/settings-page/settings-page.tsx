@@ -1,12 +1,16 @@
-import { useState } from 'react';
+import { FC, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
+import { FormCheckType } from 'react-bootstrap/esm/FormCheck';
+import { useAuth } from '../../contexts/auth-context';
 import './settings-page.css';
 
-const SettingsPage = ({ onSetMode }) => {
+const SettingsPage: FC = () => {
+
+  const { onSetMode } = useAuth();
 
   const [mode, setMode] = useState(null);
 
-  const onChangeMode = (mode) => {
+  const onChangeMode = (mode: any) => {
     setMode(mode);
     console.log(mode);
   };
@@ -16,7 +20,7 @@ const SettingsPage = ({ onSetMode }) => {
       <div className="main-container">
         <h2>Choose your repetition mode:</h2>
         <Form>
-          { ['radio'].map((type) => (
+          { ['radio'].map((type: any) => (
             <div key={ `inline-${type}` } className="mb-3">
               <Form.Check
                 defaultChecked={ true }

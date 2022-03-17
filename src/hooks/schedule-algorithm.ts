@@ -1,35 +1,37 @@
+import { DeckAppType, ItemType } from "../types/types";
+
 const store = require('store');
 
 const useScheduleAlgorithm = () => {
 
-  const findInterval = (date, timestamp) => {
+  const calculateInterval = (date: Date, timestamp: string | Date) => {
     return Math.floor((date.getTime() - new Date(timestamp).getTime()) / 60000);
   };
 
-  const selectRepetitionCards = (deckItems) => {
+  const selectRepetitionCards = (deckItems: ItemType[]) => {
     const currentDate = new Date();
 
-    let sortedDeck = [];
+    let sortedDeck: ItemType[] = [];
 
     deckItems.forEach(item => {
       switch (item.rating) {
       case 2:
-        if (findInterval(currentDate, item.date) >= 1) {
+        if (calculateInterval(currentDate, item.date) >= 1) {
           sortedDeck = [...sortedDeck, item];
         }
         break;
       case 3:
-        if (findInterval(currentDate, item.date) >= 10) {
+        if (calculateInterval(currentDate, item.date) >= 10) {
           sortedDeck = [...sortedDeck, item];
         }
         break;
       case 4:
-        if (findInterval(currentDate, item.date) >= 1440) {
+        if (calculateInterval(currentDate, item.date) >= 1440) {
           sortedDeck = [...sortedDeck, item];
         }
         break;
       case 5:
-        if (findInterval(currentDate, item.date) >= 10080) {
+        if (calculateInterval(currentDate, item.date) >= 10080) {
           sortedDeck = [...sortedDeck, item];
         }
         break;
@@ -42,7 +44,7 @@ const useScheduleAlgorithm = () => {
     
   };
 
-  const updateRepetitionInStorage = (deckItems, deckTitle) => {
+  const updateRepetitionInStorage = (deckItems: ItemType[], deckTitle: string) => {
     let deck = store.get(deckTitle);
     
     for (let i = 0; i < deckItems.length; i++) {
