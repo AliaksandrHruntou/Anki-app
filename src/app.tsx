@@ -57,7 +57,7 @@ const App: FC = () => {
             <PrivateRoute exact path="/edit-deck-page">
               <EditDeckPage/>
             </PrivateRoute>
-            <PrivateRoute exact path="/Dashboard">
+            <PrivateRoute exact path="/dashboard">
               <Dashboard/>  
             </PrivateRoute>
             <PrivateRoute exact path="/update-profile">
@@ -66,9 +66,9 @@ const App: FC = () => {
           </Switch>
           :
           <Switch>
-            <Route path="/signup" component={Signup} />
-            <Route path="/login" component={Login} />
-            <Route path="/forgot-password" component={ForgotPassword} />
+            <Route exact path="/" component={Login} />
+            <Route exact path="/signup" component={Signup} />
+            <Route exact path="/forgot-password" component={ForgotPassword} />
           </Switch>
         }
       </div>
