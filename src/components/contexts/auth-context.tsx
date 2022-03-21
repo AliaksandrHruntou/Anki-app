@@ -1,7 +1,23 @@
-import { createUserWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signOut, updateEmail } from 'firebase/auth';
-import { createContext, useContext, useState, useEffect, FC } from 'react';
+import { 
+  createContext, 
+  useContext, 
+  useState, 
+  useEffect, 
+  FC 
+} from 'react';
+
+import { 
+  createUserWithEmailAndPassword, 
+  onAuthStateChanged, 
+  sendPasswordResetEmail, 
+  signInWithEmailAndPassword, 
+  signOut, 
+  updateEmail,
+  updatePassword 
+} from 'firebase/auth';
+
 import { auth } from '../../db/firebase-config';
-import useFirestore from '../../hooks/firestore';
+
 import { DeckAppType } from '../../types/types';
 
 const AuthContext = createContext<any | null>(null)
@@ -13,6 +29,7 @@ export const useAuth = () => {
 export const AuthProvider: FC = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
+
   const [editMode, setEditMode] = useState(false);
   const [mode, setMode] = useState("Front/Back");
   const [currentDeck, setCurrentDeck] = useState<DeckAppType | null>(null);
@@ -33,12 +50,12 @@ export const AuthProvider: FC = ({ children }) => {
     return sendPasswordResetEmail(auth, email)
   }
 
-  const updateEmail = (email: string): any => {
-    return currentUser.updateEmail(email);
+  const updateUserEmail = (currentUser: any, email: string): any => {
+    return updateEmail(currentUser, email)
   }
 
-  const updatePassword = (password: string): any => {
-    return currentUser.updatePassword(password)
+  const updateUserPassword = (currentUser: any, password: string): any => {
+    return updatePassword(currentUser, password)
   }
 
   useEffect(() => {
@@ -57,8 +74,8 @@ export const AuthProvider: FC = ({ children }) => {
     signup,
     logout,
     resetPassword,
-    updateEmail,
-    updatePassword,
+    updateUserEmail,
+    updateUserPassword,
     editMode,
     setEditMode,
     mode,

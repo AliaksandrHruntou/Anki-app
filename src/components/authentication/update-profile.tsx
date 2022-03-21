@@ -7,7 +7,7 @@ const UpdateProfile = () => {
   const emailRef = useRef<HTMLInputElement>(null)
   const passwordRef = useRef<HTMLInputElement>(null)
   const passwordConfirmRef = useRef<HTMLInputElement>(null)
-  const { currentUser, updatePassword, updateEmail } = useAuth()
+  const { currentUser, updateUserPassword, updateUserEmail } = useAuth()
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
   const history = useHistory()
@@ -23,10 +23,10 @@ const UpdateProfile = () => {
     setError("")
 
     if (emailRef.current?.value !== currentUser.email) {
-      promises.push(updateEmail(emailRef.current?.value))
+      promises.push(updateUserPassword(emailRef.current?.value))
     }
     if (passwordRef.current?.value) {
-      promises.push(updatePassword(passwordRef.current?.value))
+      promises.push(updateUserEmail(passwordRef.current?.value))
     }
 
     Promise.all(promises)

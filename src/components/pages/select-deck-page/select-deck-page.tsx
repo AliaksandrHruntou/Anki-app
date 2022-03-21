@@ -19,9 +19,6 @@ const SelectDeckPage: FC = () => {
         setDecks(response)
       })
       .catch((e) => console.log(e))
-
-
-    console.log(currentUser);
     //eslint-disable-next-line
   }, []);
 

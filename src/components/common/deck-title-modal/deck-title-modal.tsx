@@ -20,7 +20,6 @@ const DeckTitleModal: FC<ModalPropsType> = ({ onSubmitDeckTitle }) => {
   }
 
   const validate = (values: ValuesType): ValidationErrors | Promise<ValidationErrors> => {
-    console.log(values);
     return
   }
   

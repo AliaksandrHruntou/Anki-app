@@ -1,15 +1,18 @@
-import React, { FormEvent, useRef, useState } from "react"
+import { FormEvent, useRef, useState } from "react"
 import { Form, Button, Card, Alert } from "react-bootstrap"
 import { useAuth } from '../contexts/auth-context';
 import { Link, useHistory } from "react-router-dom"
 
 const Login = () => {
-  const emailRef = useRef<HTMLInputElement>(null)
-  const passwordRef = useRef<HTMLInputElement>(null)
-  const { login } = useAuth()
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
+  
   const history = useHistory()
+
+  const emailRef = useRef<HTMLInputElement>(null)
+  const passwordRef = useRef<HTMLInputElement>(null)
+
+  const { login } = useAuth()
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
