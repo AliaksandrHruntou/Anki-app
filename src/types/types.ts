@@ -33,3 +33,10 @@ export type DeckAppType = {
   userId: string
   deckId: string
 }
+
+export type UserData = {
+  email: string
+  isAdmin: boolean
+  nickname: string
+  online: boolean
+}

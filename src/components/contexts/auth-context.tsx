@@ -8,7 +8,6 @@ import {
 
 import { 
   createUserWithEmailAndPassword, 
-  getIdTokenResult, 
   onAuthStateChanged, 
   sendPasswordResetEmail, 
   signInWithEmailAndPassword, 
@@ -19,8 +18,9 @@ import {
 
 import { auth, db } from '../../firebase/firebase-config';
 
-import { DeckAppType } from '../../types/types';
-import { collection, doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc } from 'firebase/firestore';
+import useFirestore from '../../hooks/firestore';
+import { UserData } from '../../types/types';
 
 const AuthContext = createContext<any | null>(null)
 
@@ -30,12 +30,15 @@ export const useAuth = () => {
 
 export const AuthProvider: FC = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<any | null>(null);
+  const [userData, setUserData] = useState<UserData>()
   const [isAdmin, setIsAdmin] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(true);
 
   const [editMode, setEditMode] = useState<boolean>(false);
   const [mode, setMode] = useState<string>("Front/Back");
   const [currentDeckId, setCurrentDeckId] = useState<string>('');
+
+  const { getUser } = useFirestore();
 
   const signup = async (nickname: string, email: string, password: string) => {
     const res = await createUserWithEmailAndPassword(auth, email, password)
@@ -82,8 +85,13 @@ export const AuthProvider: FC = ({ children }) => {
               setIsAdmin(true)
             }
           })
+
+        getUser(user.uid)
+          .then(userData => {
+            setUserData(userData)
+          })
       }
-      setCurrentUser(user)                                   
+      setCurrentUser(user)                                  
       setLoading(false) 
     })
 
@@ -105,7 +113,8 @@ export const AuthProvider: FC = ({ children }) => {
     mode,
     setMode,
     currentDeckId,
-    setCurrentDeckId
+    setCurrentDeckId,
+    userData
   }
 
   return (

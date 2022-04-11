@@ -1,13 +1,15 @@
-import React, { useState } from "react"
+import { useState } from "react"
 import { Card, Button, Alert, Container } from "react-bootstrap"
 import { useAuth } from '../../contexts/auth-context';
 import { Link, useHistory } from "react-router-dom"
 import MakeAdminModal from "./make-admin-modal/make-admin-modal";
+import useFirestore from "../../../hooks/firestore";
 
 const ProfilePage = () => {
   const [error, setError] = useState("")
   const [modal, setModal] = useState(false)
-  const { currentUser, logout, isAdmin } = useAuth()
+  const { currentUser, logout, isAdmin, userData } = useAuth()
+  const { getUserLogout } = useFirestore();
   const history = useHistory()
 
   async function handleLogout() {
@@ -19,6 +21,8 @@ const ProfilePage = () => {
     } catch {
       setError("Failed to log out")
     }
+
+    getUserLogout(currentUser.uid)
   }
 
   return (
@@ -29,8 +33,12 @@ const ProfilePage = () => {
         }
         <Container>
           <h2 className="text-center mb-4">Profile</h2>
-          {error && <Alert variant="danger">{error}</Alert>}
-          <strong>Email:</strong> {currentUser.email}
+          <div>
+            <strong>Nickname:</strong> {userData.nickname}
+          </div>
+          <div>
+            <strong>Email:</strong> {currentUser.email}
+          </div>
           <Container className="d-flex justify-content-center">
             <Link to="/update-profile" className="btn btn-primary text-center w-10 mt-3">
               Update Profile

@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Button, Container } from "react-bootstrap";
 import { LinkContainer } from 'react-router-bootstrap';
 import ErrorBoundary from '../../common/error-boundary/error-boundary';
@@ -7,9 +7,9 @@ import { useAuth } from '../../contexts/auth-context';
 import './main-page.css';
 
 const MainPage: FC = () => {
-  const [flip, setFlip] = useState(false); 
+  const [flip, setFlip] = useState(false);
 
-  const { currentUser } = useAuth();
+  const { currentUser} = useAuth();
 
   const learningButton = <LinkContainer to="/select-deck-page">
     <Button variant='success' size='sm'>learning</Button>

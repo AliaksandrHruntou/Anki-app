@@ -36,6 +36,29 @@ const useFirestore = () => {
     })
   }
 
+  const getUserLogout = async (userId: string) => {
+    const userDocRef = doc(usersCollectionRef, userId)
+
+    await updateDoc(userDocRef, {
+      online: false
+    })
+  }
+
+  const getUser = async (userId: string) => {
+    const userDocRef = doc(usersCollectionRef, userId)
+
+    const querySnapshot = await getDoc(userDocRef);
+
+    const data = { ...querySnapshot.data() }
+
+    return {
+      email: data.email,
+      isAdmin: data.isAdmin,
+      nickname: data.nickname,
+      online: data.online
+    }
+  }
+
   const getDeckFromFirestore = async (deckId: string) => {
     setLoading(true);
     const deckRef = doc(decksCollectionRef, deckId);
@@ -48,8 +71,8 @@ const useFirestore = () => {
     return { 
       deckTitle: data.deckTitle,
       items: data.items,
-      userId: data.userId, 
-      deckId: querySnapshot.id 
+      userId: data.userId,
+      deckId: querySnapshot.id
     }
   };
 
@@ -80,6 +103,8 @@ const useFirestore = () => {
     getDeckFromFirestore,
     getUserDecksFromFirestore,
     updateUserDeck,
+    getUser,
+    getUserLogout,
     loading
   };
 
