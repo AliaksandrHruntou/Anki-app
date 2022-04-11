@@ -1,16 +1,19 @@
-import React, { FormEvent, useRef, useState } from "react"
+import { FormEvent, useRef, useState } from "react"
 import { Form, Button, Card, Alert } from "react-bootstrap"
 import { useAuth } from '../contexts/auth-context';
 import { Link, useHistory } from "react-router-dom"
 
 const UpdateProfile = () => {
+  const [error, setError] = useState("")
+  const [loading, setLoading] = useState(false)
+
+  const history = useHistory()
+
+  const { currentUser, updateUserPassword, updateUserEmail } = useAuth()
+  
   const emailRef = useRef<HTMLInputElement>(null)
   const passwordRef = useRef<HTMLInputElement>(null)
   const passwordConfirmRef = useRef<HTMLInputElement>(null)
-  const { currentUser, updateUserPassword, updateUserEmail } = useAuth()
-  const [error, setError] = useState("")
-  const [loading, setLoading] = useState(false)
-  const history = useHistory()
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -23,10 +26,10 @@ const UpdateProfile = () => {
     setError("")
 
     if (emailRef.current?.value !== currentUser.email) {
-      promises.push(updateUserPassword(emailRef.current?.value))
+      promises.push(updateUserEmail(currentUser, emailRef.current?.value))
     }
     if (passwordRef.current?.value) {
-      promises.push(updateUserEmail(passwordRef.current?.value))
+      promises.push(updateUserPassword(currentUser, passwordRef.current?.value))
     }
 
     Promise.all(promises)
@@ -73,14 +76,14 @@ const UpdateProfile = () => {
                 placeholder="Leave blank to keep the same"
               />
             </Form.Group>
-            <Button disabled={loading} className="w-100" type="submit">
+            <Button disabled={loading} className="w-100 mt-3" type="submit">
               Update
             </Button>
           </Form>
         </Card.Body>
       </Card>
       <div className="w-100 text-center mt-2">
-        <Link to="/">Cancel</Link>
+        <Link to="/dashboard">Cancel</Link>
       </div>
     </>
   )

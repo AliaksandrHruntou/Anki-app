@@ -1,0 +1,21 @@
+.users-modal-container {
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  border: 2px solid #505050;
+  padding: 1.5em;
+  border-radius: 0.5em;
+  min-height: 150px;
+  width: 300px;
+}
+
+.cross {
+  position: absolute;
+  right: 10px;
+  top: 6px;
+}

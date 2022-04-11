@@ -3,37 +3,62 @@ import { FlashCardPropsType } from "../../../types/types";
 
 import './flashcard.css';
 
-
-
 const FlashCard: FC<FlashCardPropsType> = ({
   id, 
   front, 
-  back, 
+  back,
+  imgURL,
+  description,
   mode, 
   editMode, 
-  onDeleteCard, 
-  repetitionMode
+  onDeleteCard,
+  setCardModal,
+  setCurrentCard
 }) => {
 
   const [flip, setFlip] = useState(false);
 
   const frontBack = 
     <>
-      <div className={ `front ${editMode || !repetitionMode ? 'edit': ''}` }>
-        { front }
+      <div className={ `front ${editMode ? 'edit': ''}` }>
+        {!editMode && imgURL && 
+        <div className="img">
+          <img src={imgURL} className="flashcard-img mx-auto d-block"/>  
+        </div>}
+        <div className="text-center p-2">{ front }</div>
+        {!editMode && description && 
+          <div className="description">{ description }</div>}
       </div>
-      <div className={ `back ${editMode || !repetitionMode ? 'edit': ''}` }>
-        { back }
+      <div className={ `back ${editMode ? 'edit': ''}` }>
+        {!editMode && imgURL && 
+          <div className="img">
+            <img src={imgURL} className="flashcard-img mx-auto d-block"/>  
+          </div>}
+        <div className="text-center">{ back }</div>
+        {!editMode && description && 
+          <div className="description">{ description }</div>}
       </div>
     </>;
 
   const backFront =
     <>
       <div className={ `front ${editMode ? 'edit': ''}` }>
-        { back }
+        {!editMode && imgURL && 
+        <div className="img mx-auto">
+          <img src={imgURL} className="flashcard-img mx-auto d-block"/>  
+        </div>}
+        <div className="text-center p-2">{ back }</div>
+        {!editMode && description && 
+          <div className="description">{ description }</div>}
       </div>
       <div className={ `back ${editMode ? 'edit': ''}` }>
-        { front }
+        {!editMode && imgURL && 
+        <div className="img">
+          <img src={imgURL} className="flashcard-img mx-auto d-block"/>  
+        </div>}
+        <div className="text-center p-2">{ front }</div>
+        {!editMode && description && 
+          <div className="description">{ description }</div>}
       </div>
     </>;
 
@@ -51,21 +76,33 @@ const FlashCard: FC<FlashCardPropsType> = ({
     }
   };
 
-  const template = selectTemplate(mode);
+  const template = editMode ? frontBack : selectTemplate(mode);
   
   const className =
-    editMode || !repetitionMode
+    editMode
       ? 'edit-mode-card'
       : `flashcard ${flip ? 'flip' : ''}`;
 
   return (
-    <div className='container'>
+    <div className='card-container'>
       <div
         className={ className }
         onClick={ () => setFlip(!flip) }
       >
-        { editMode || !repetitionMode 
-          ? <i className="fa-solid fa-xmark cross" onClick={ () => onDeleteCard(id) }></i>
+        { editMode 
+          ? <>
+            <i className="fas fa-edit edit-mark" onClick={ () => {
+              setCurrentCard({
+                id,
+                front,
+                back,
+                imgURL,
+                description
+              })
+              setCardModal(true)
+            }}></i>
+            <i className="fa-solid fa-xmark cross" onClick={ () => onDeleteCard(id) }></i>
+          </>
           : null
         }
         { template }

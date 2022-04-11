@@ -13,6 +13,7 @@ const PrivateRoute: FC<PrivateRoutePropsType> = ({
   children
 }) => {
   const { currentUser } = useAuth();
+  
   return (
     <Route
       exact = {exact}
@@ -20,7 +21,7 @@ const PrivateRoute: FC<PrivateRoutePropsType> = ({
       render={() => {
         return currentUser ?
           children :
-          <Redirect to='/login'/>
+          <Redirect to='/'/>
       }}
     >
     </Route>

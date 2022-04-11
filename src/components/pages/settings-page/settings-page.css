@@ -1,6 +1,4 @@
-.main-container {
-  display: flex;
-  justify-content: space-around;
+.main-settings-container {
   align-items: center;
   padding: 25px;
   background-color: #fcfcfc;

@@ -7,7 +7,7 @@
     /* border: 2px solid #505050; */
     border-radius: 5px;
     color: black;
-    height: 250px;
+    height: 400px;
 }
 
 .edit-panel {
@@ -60,18 +60,4 @@
     position: relative;
     margin: auto;
     transition: ease-in;
-}
-
-.deck-info {
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    color: #fff;
-    margin-bottom: 20px;
-    width: 370px;
-}
-
-.deck-info > * {
-    width: 120px;
 }

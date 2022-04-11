@@ -19,7 +19,7 @@
   width: 250px;
 }
 
-.deck-title-modal-container {
+.new-card-modal-container {
   z-index: 1000;
   display: flex;
   flex-direction: column;
@@ -31,7 +31,7 @@
   border: 2px solid #505050;
   padding: 1.5em;
   border-radius: 0.5em;
-  height: 200px;
+  min-height: 350px;
   width: 300px;
 }
 

@@ -1,8 +1,10 @@
 export type ItemType = {
   front: string
   back: string
+  description: string
+  imgURL: string
   rating: number
-  date: Date | string
+  date: string
   id: string
 }
 
@@ -12,18 +14,22 @@ export type DeckType = {
 }
 
 export type FlashCardPropsType = {
-  id: number
+  id: string
   front: string
-  back: string 
+  back: string
+  imgURL: string
+  description: string
   mode?: string | null
   editMode?: boolean 
-  onDeleteCard: (id: number) => void
+  onDeleteCard: (id: string) => void
   repetitionMode?: any
+  setCardModal?: any
+  setCurrentCard?: any
 }
 
 export type DeckAppType = {
-  deckTitle?: string
-  items?: Array<ItemType>
-  userId?: string
+  deckTitle: string
+  items: Array<ItemType>
+  userId: string
   deckId: string
 }

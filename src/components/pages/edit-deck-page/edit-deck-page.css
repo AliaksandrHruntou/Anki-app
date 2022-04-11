@@ -35,11 +35,11 @@
   width: 300px;
 }
 
-.deck-container {
+.edit-deck-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(15em, max-content));
+  grid-template-columns: repeat(auto-fit, minmax(18em, max-content));
   grid-template-rows: repeat(auto-fit, minmax(5em, max-content));
-  grid-gap: 0.5rem;
+  grid-gap: 1.5rem;
   grid-auto-flow: dense;
 }
 

@@ -1,5 +1,5 @@
 import { FormEvent, useRef, useState } from "react"
-import { Form, Button, Card, Alert } from "react-bootstrap"
+import { Form, Button, Card, Alert, Container } from "react-bootstrap"
 import { useAuth } from '../contexts/auth-context';
 import { Link, useHistory } from "react-router-dom"
 
@@ -34,13 +34,18 @@ const Login = () => {
       <Card>
         <Card.Body>
           <h2 className="text-center mb-4">Log In</h2>
-          {error && <Alert variant="danger">{error}</Alert>}
+          {error  && <Alert variant="danger">{error}</Alert>}
           <Form onSubmit={handleSubmit}>
-            <Form.Group id="email">
+            <Form.Group className="mb-2" id="email">
               <Form.Label>Email</Form.Label>
-              <Form.Control type="email" ref={emailRef} required />
+              <Form.Control 
+                type="email" 
+                ref={emailRef} 
+                // pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2, 4}$" 
+                required 
+              />
             </Form.Group>
-            <Form.Group id="password">
+            <Form.Group className="mb-3" id="password">
               <Form.Label>Password</Form.Label>
               <Form.Control type="password" ref={passwordRef} required />
             </Form.Group>

@@ -8,6 +8,7 @@ import {
 
 import { 
   createUserWithEmailAndPassword, 
+  getIdTokenResult, 
   onAuthStateChanged, 
   sendPasswordResetEmail, 
   signInWithEmailAndPassword, 
@@ -16,9 +17,10 @@ import {
   updatePassword 
 } from 'firebase/auth';
 
-import { auth } from '../../db/firebase-config';
+import { auth, db } from '../../firebase/firebase-config';
 
 import { DeckAppType } from '../../types/types';
+import { collection, doc, setDoc } from 'firebase/firestore';
 
 const AuthContext = createContext<any | null>(null)
 
@@ -28,14 +30,26 @@ export const useAuth = () => {
 
 export const AuthProvider: FC = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<any | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(true);
 
-  const [editMode, setEditMode] = useState(false);
-  const [mode, setMode] = useState("Front/Back");
-  const [currentDeck, setCurrentDeck] = useState<DeckAppType | null>(null);
+  const [editMode, setEditMode] = useState<boolean>(false);
+  const [mode, setMode] = useState<string>("Front/Back");
+  const [currentDeckId, setCurrentDeckId] = useState<string>('');
 
-  const signup = (email: string, password: string) => {
-    return createUserWithEmailAndPassword(auth, email, password)
+  const signup = async (nickname: string, email: string, password: string) => {
+    const res = await createUserWithEmailAndPassword(auth, email, password)
+
+    await setDoc(doc(db, "users", res.user.uid), {
+      online: true,
+      nickname,
+      email,
+      isAdmin: false,
+      settings: {
+        learningMode: "Front/Back",
+        textStyle: {}
+      }      
+    });
   }
 
   const login = (email: string, password: string) => {
@@ -43,6 +57,7 @@ export const AuthProvider: FC = ({ children }) => {
   }
 
   const logout = () => {
+    setIsAdmin(false)
     return signOut(auth)
   }
 
@@ -60,8 +75,16 @@ export const AuthProvider: FC = ({ children }) => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, user => {
-      setCurrentUser(user)
-      setLoading(false)
+      if (user) {
+        user.getIdTokenResult()
+          .then(getIdTokenResult => {
+            if(getIdTokenResult.claims.admin) {
+              setIsAdmin(true)
+            }
+          })
+      }
+      setCurrentUser(user)                                   
+      setLoading(false) 
     })
 
     return unsubscribe
@@ -70,6 +93,7 @@ export const AuthProvider: FC = ({ children }) => {
 
   const value = {
     currentUser,
+    isAdmin,
     login,
     signup,
     logout,
@@ -80,8 +104,8 @@ export const AuthProvider: FC = ({ children }) => {
     setEditMode,
     mode,
     setMode,
-    currentDeck,
-    setCurrentDeck
+    currentDeckId,
+    setCurrentDeckId
   }
 
   return (

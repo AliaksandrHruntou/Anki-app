@@ -1,8 +1,9 @@
 import { FC, useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
-import { FormCheckType } from 'react-bootstrap/esm/FormCheck';
+import { Button, Container, Form } from 'react-bootstrap';
+import {Editor, EditorState} from 'draft-js';
 import { useAuth } from '../../contexts/auth-context';
 import './settings-page.css';
+import 'draft-js/dist/Draft.css';
 
 const SettingsPage: FC = () => {
 
@@ -16,12 +17,12 @@ const SettingsPage: FC = () => {
   };
 
   return (
-    <>
-      <div className="main-container">
+    <Container className="main-settings-container">
+      <Container className='d-flex justify-content-center'>
         <h2>Choose your repetition mode:</h2>
         <Form>
           { ['radio'].map((type: any) => (
-            <div key={ `inline-${type}` } className="mb-3">
+            <div key={ `inline-${type}` } className="mt-2 ml-4">
               <Form.Check
                 defaultChecked={ true }
                 inline
@@ -53,13 +54,13 @@ const SettingsPage: FC = () => {
             </div>
           )) }
         </Form>
-      </div>
+      </Container>
       <div className="button-container">
         <Button variant='danger' className='mx-auto' onClick={ () => onSetMode(mode) }>
           Save
         </Button>
       </div>
-    </>
+    </Container>
   );
 };
 

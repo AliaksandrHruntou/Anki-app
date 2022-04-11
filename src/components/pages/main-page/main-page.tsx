@@ -1,6 +1,7 @@
 import { FC, useState } from 'react';
-import { Button } from "react-bootstrap";
+import { Button, Container } from "react-bootstrap";
 import { LinkContainer } from 'react-router-bootstrap';
+import ErrorBoundary from '../../common/error-boundary/error-boundary';
 import { useAuth } from '../../contexts/auth-context';
 
 import './main-page.css';
@@ -19,8 +20,8 @@ const MainPage: FC = () => {
   </LinkContainer>;
 
   return (
-    <div className='container'>
-      <div
+    <ErrorBoundary>
+      <Container
         className={ `card-welcome ${flip ? 'flip' : ''}` }
         onClick={ () => setFlip(!flip) }
       >
@@ -32,8 +33,8 @@ const MainPage: FC = () => {
         <div className="back">
           Start { learningButton } with already created decks or { createButton } a new one.
         </div>
-      </div>
-    </div>
+      </Container>
+    </ErrorBoundary>
   );
 };
 

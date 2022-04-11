@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, lazy, Suspense } from 'react';
 import { 
   Route, 
   BrowserRouter as Router, 
@@ -6,18 +6,19 @@ import {
 } from 'react-router-dom';
 
 import AppHeader from './components/common/app-header/app-header';
+import Spinner from './components/common/spinner/spinner';
 
-import { 
-  CreateDeckPage, 
-  EditDeckPage, 
-  MainPage, 
-  MainTablePage, 
-  SelectDeckPage, 
-  SettingsPage
-} from './components/pages'
+const Page404 = lazy(() => import('./components/pages/page404'));
+const MainPage = lazy(() => import('./components/pages/main-page'));
+const SelectDeckPage = lazy(() => import('./components/pages/select-deck-page'));
+const CreateDeckPage = lazy(() => import('./components/pages/create-deck-page'));
+const SettingsPage = lazy(() => import('./components/pages/settings-page'));
+const LearningPage = lazy(() => import('./components/pages/learning-page'));
+const EditDeckPage = lazy(() => import('./components/pages/edit-deck-page'));
+const ProfilePage = lazy(() => import('./components/pages/profile-page'));
+const UsersPage = lazy(() => import('./components/pages/users-page'));
 
-import { 
-  Dashboard, 
+import {
   ForgotPassword, 
   Login, 
   PrivateRoute, 
@@ -29,47 +30,90 @@ import { useAuth } from './components/contexts/auth-context';
 
 import './app.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import ErrorBoundary from './components/common/error-boundary/error-boundary';
+import { Container } from 'react-bootstrap';
 
 const App: FC = () => {
-  const { currentUser } = useAuth();
+  const { currentUser, isAdmin } = useAuth();
 
   return (
     <Router>
       <div className="app">
         {currentUser && <AppHeader/>}
         {currentUser ?
-          <Switch>
-            <PrivateRoute exact path="/">
-              <MainPage/>
-            </PrivateRoute>
-            <PrivateRoute exact path="/select-deck-page">
-              <SelectDeckPage/>
-            </PrivateRoute>
-            <PrivateRoute exact path="/create-deck-page">
-              <CreateDeckPage/>
-            </PrivateRoute>
-            <PrivateRoute exact path="/settings-page">
-              <SettingsPage/>
-            </PrivateRoute>
-            <PrivateRoute exact path="/main-table-page">
-              <MainTablePage/>
-            </PrivateRoute>
-            <PrivateRoute exact path="/edit-deck-page">
-              <EditDeckPage/>
-            </PrivateRoute>
-            <PrivateRoute exact path="/dashboard">
-              <Dashboard/>  
-            </PrivateRoute>
-            <PrivateRoute exact path="/update-profile">
-              <UpdateProfile/>
-            </PrivateRoute>
-          </Switch>
+          <Suspense fallback={<Spinner/>}>
+            <Switch>
+              <PrivateRoute exact path="/">
+                <ErrorBoundary>
+                  <MainPage/>
+                </ErrorBoundary>
+              </PrivateRoute>
+              <PrivateRoute exact path="/select-deck-page">
+                <ErrorBoundary>
+                  <SelectDeckPage/>
+                </ErrorBoundary>
+              </PrivateRoute>
+              <PrivateRoute exact path="/create-deck-page">
+                <ErrorBoundary>
+                  <CreateDeckPage/>
+                </ErrorBoundary>
+              </PrivateRoute>
+              <PrivateRoute exact path="/settings-page">
+                <ErrorBoundary>
+                  <SettingsPage/>
+                </ErrorBoundary>
+              </PrivateRoute>
+              <PrivateRoute exact path="/main-table-page">
+                <ErrorBoundary>
+                  <LearningPage/>
+                </ErrorBoundary>
+              </PrivateRoute>
+              <PrivateRoute exact path="/edit-deck-page">
+                <ErrorBoundary>
+                  <EditDeckPage/>
+                </ErrorBoundary>
+              </PrivateRoute>
+              <PrivateRoute exact path="/dashboard">
+                <ErrorBoundary>
+                  <ProfilePage/>
+                </ErrorBoundary>
+              </PrivateRoute>
+              <PrivateRoute exact path="/update-profile">
+                <ErrorBoundary>
+                  <UpdateProfile/>
+                </ErrorBoundary>
+              </PrivateRoute>
+              {isAdmin && 
+                <PrivateRoute exact path="/users">
+                  <ErrorBoundary>
+                    <UsersPage/>
+                  </ErrorBoundary>
+                </PrivateRoute>
+              }
+              <Route path="*">
+                <Page404/>
+              </Route>
+            </Switch>
+          </Suspense>
           :
-          <Switch>
-            <Route exact path="/" component={Login} />
-            <Route exact path="/signup" component={Signup} />
-            <Route exact path="/forgot-password" component={ForgotPassword} />
-          </Switch>
+          <Container
+            className="d-flex align-items-center justify-content-center"
+            style={{ minHeight: "100vh" }}
+          >
+            <div className="w-100" style={{ maxWidth: "400px" }}>
+              <Switch>
+                <Route exact path="/">
+                  <Login/>
+                </Route>
+                <Route path="/signup">
+                  <Signup/>
+                </Route>
+                <Route path="/forgot-password">
+                  <ForgotPassword/>
+                </Route>
+              </Switch>
+            </div>
+          </Container>
         }
       </div>
     </Router>

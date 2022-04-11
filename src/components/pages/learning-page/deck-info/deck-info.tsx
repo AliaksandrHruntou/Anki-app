@@ -25,16 +25,19 @@ const DeckInfo: FC<DeckInfoPropsType> = ({ items }) => {
     items.forEach((item) => {
       if (item.rating === 1) {
         info.new = info.new + 1;
-      } else if (item.rating > 1 && item.rating < 4) {
+        return
+      }
+      if (item.rating >= 2 && item.rating <= 44) {
         info.inProcess = info.inProcess + 1;
-      } else if (item.rating === 4) {
+        return
+      }
+      if (item.rating === 444) {
         info.learned = info.learned + 1;
+        return
       }
     });
     return info;
-  };
-
-  //добавить полную обработку 
+  }; 
   
   const deckInfo = renderInfo(items);
 
