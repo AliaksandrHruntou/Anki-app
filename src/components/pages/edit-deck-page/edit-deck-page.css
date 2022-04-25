@@ -19,7 +19,7 @@
   width: 250px;
 }
 
-.new-card-modal-container {
+.deck-title-modal-container {
   z-index: 1000;
   display: flex;
   flex-direction: column;
@@ -31,32 +31,15 @@
   border: 2px solid #505050;
   padding: 1.5em;
   border-radius: 0.5em;
-  min-height: 350px;
+  height: 200px;
   width: 300px;
 }
 
-.new-card-button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  font-size: 20px;
-  border-radius: 0.5em;
-  border: 2px dashed #505050;
-  background-color: #fcfcfc;
-  transform-style: preserve-3d;
-  color: #505050;
-  transition: 150ms;
-  cursor: pointer;
-  height: 150px;
-  width: 300px;
-}
-
-.deck-container {
+.edit-deck-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(15em, max-content));
+  grid-template-columns: repeat(auto-fit, minmax(18em, max-content));
   grid-template-rows: repeat(auto-fit, minmax(5em, max-content));
-  grid-gap: 0.5rem;
+  grid-gap: 1.5rem;
   grid-auto-flow: dense;
 }
 

@@ -5,9 +5,12 @@
 }
 
 .app {
-  padding: 0 30px;
   margin: 0 auto;
-  max-width:  1280px;
+  width: 100%;
   background-color: #fcfcfc;
   height: 100vh;
+}
+
+.app > * {
+  padding: 0 30px;
 }

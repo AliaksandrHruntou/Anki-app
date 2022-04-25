@@ -1,0 +1,11 @@
+.deck-info {
+  margin: 0 auto;
+  color: #fff;
+  margin-bottom: 10px;
+  width: 455px;
+}
+
+.deck-info > * {
+  width: 120px;
+  margin: 5px
+}

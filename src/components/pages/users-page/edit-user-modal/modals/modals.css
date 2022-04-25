@@ -1,4 +1,4 @@
-.deck-title-modal-container {
+.users-modal-container {
   z-index: 1000;
   display: flex;
   flex-direction: column;
@@ -10,18 +10,12 @@
   border: 2px solid #505050;
   padding: 1.5em;
   border-radius: 0.5em;
-  min-height: 170px;
+  min-height: 150px;
   width: 300px;
 }
 
-.add-form {
-  margin-top: 15px;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-}
-
-.add-form input {
-  width: 250px;
+.cross {
+  position: absolute;
+  right: 10px;
+  top: 6px;
 }
